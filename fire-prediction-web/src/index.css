@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Ensure the root containers allow for 100% height */
+html, body {
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin: 0;
+  padding: 0;
+}
