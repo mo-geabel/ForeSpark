@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect} from 'react';
 import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { useNavigate } from 'react-router-dom';
 import Search from './Search'; 
@@ -7,7 +7,12 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
   const navigate = useNavigate();
   const map = useMap();
   const [mapType, setMapType] = useState<string>('satellite');
-
+  useEffect(() => {
+    if (map && markerPos) {
+      map.panTo(markerPos); // Move camera to new coordinates
+      map.setZoom(12);      // Zoom in for better detail of the searched area
+    }
+  }, [map, markerPos]);    // Trigger whenever map loads or markerPos updates
   const handleFindMe = () => {
     if (!navigator.geolocation) return alert("Geolocation not supported");
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -90,12 +95,12 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
           <button 
             onClick={handleAnalyze}
             disabled={isAnalyzing}
-            className={`w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-3
+            className={`w-full py-5 rounded-2xl font-medium text-[12px] uppercase tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-3
               ${isAnalyzing ? 'bg-slate-200 text-slate-400' : 'bg-emerald-600 text-white hover:bg-emerald-500 active:scale-95'}`}
           >
             {isAnalyzing ? (
               <div className="h-4 w-4 border-2 border-slate-400 border-t-emerald-600 rounded-full animate-spin" />
-            ) : "🔥 Analyze Fire Risk"}
+            ) : "Analyze Fire Risk"}
           </button>
         </div>
       )}
