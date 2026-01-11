@@ -13,7 +13,7 @@ export default function About() {
             <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Accuracy</p>
           </div>
           <div className="bg-emerald-500/5 border border-emerald-500/10 p-8 rounded-[2.5rem] text-center mt-8">
-            <h4 className="text-4xl font-black bg-slate-50 mb-2">24/7</h4>
+            <h4 className="text-4xl font-black bg-transparent mb-2">24/7</h4>
             <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Monitoring</p>
           </div>
         </div>

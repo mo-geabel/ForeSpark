@@ -41,11 +41,11 @@ export default function Hero({ onStart }: HeroProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            TÜRKIYE REGEION 
+            TÜRKIYE REGION 
           </div>
         <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9] mb-8 text-slate-900">
-          AI <span className='text-orange-700'>Fire</span><span className='text-emerald-600'>Forest</span> <br /> 
-          <span className="text-slate-900">Protection.</span>
+          AI <span className='text-red-700'>Fire</span><span className='text-emerald-600'>Forest</span> <br /> 
+          <span className="text-slate-900">Prediction</span>
         </h1>
         <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-2xl mx-auto">
           Advanced neural networks analyzing satellite data to protect our green future.

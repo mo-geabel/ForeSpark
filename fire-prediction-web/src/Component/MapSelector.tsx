@@ -209,12 +209,12 @@ export default function MapSelector() {
                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-800">Spatial Grid Analysis</h3>
                   <p className="text-[10px] text-emerald-600 mt-1">9-point deep learning verification</p>
                 </div>
-                <div className="h-8 w-8 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold text-xs">9</div>
+                {/* <div className="h-8 w-8 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold text-xs">9</div> */}
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3">
                 {analysisResult.grid_data.map((point: any, idx: number) => (
-                  <div key={idx} className="relative rounded-3xl overflow-hidden shadow-md border-2 border-white aspect-square group">
+                  <div key={idx} className="relative overflow-hidden shadow-md border-2 border-white aspect-square group">
                     <img 
                         src={`https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`} 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
@@ -230,7 +230,7 @@ export default function MapSelector() {
                     <div className="absolute bottom-3 left-3 right-3 flex flex-col gap-1">
                       <div className="flex justify-between items-center text-[9px] font-black text-white uppercase tracking-wider">
                         <span className={point.individual_prob > 0.4 ? "text-orange-300" : "text-emerald-300"}>
-                            {(point.individual_prob * 100).toFixed(0)}% Confidence
+                            {(point.individual_prob * 100).toFixed(0)}% probability
                         </span>
                       </div>
                       <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
@@ -251,21 +251,23 @@ export default function MapSelector() {
                 <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
                   AI Verdict
                 </span>
-                <h2 className="text-5xl font-light text-slate-900 tracking-tighter mt-4 leading-none">
+                {analysisResult.result === "High Risk" || analysisResult.result === "Critical Risk" ? (
+                  <>
+                <h2 className="text-5xl font-bold text-red-600 tracking-tighter mt-4 leading-none">
                   {analysisResult.result}
                 </h2>
+                  </>
+                ) : (
+                  <>
+                <h2 className="text-5xl font-bold text-emerald-600 tracking-tighter mt-4 leading-none">
+                  {analysisResult.result}
+                </h2>
+                </>
+                )}
                 <div className="mt-8 flex items-baseline gap-3">
-                  <span className="text-6xl font-medium text-emerald-600 tabular-nums">
+                  <span className="text-6xl font-medium text-slate-900 tabular-nums">
                     {(analysisResult.total_probability * 100).toFixed(1)}%
                   </span>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Detected</span>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Risk</span>
-                  </div>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Model</span>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Certainty</span>
                 </div>
               </div>
 

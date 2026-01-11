@@ -13,7 +13,7 @@ CORS(app)
 
 # --- CONFIG ---
 MAPBOX_TOKEN = "pk.eyJ1IjoibWFtb21nZDEiLCJhIjoiY21na25kZm5uMHM1YjJtcXdqMWQzeXBheCJ9.iUkG0CnS1X49zKVsTO3gug"
-COORD_OFFSET = 0.0015 
+COORD_OFFSET = 0.0031
 WEIGHT_MATRIX = [
     [0.05, 0.10, 0.05],
     [0.10, 0.40, 0.10],
@@ -95,8 +95,8 @@ def predict():
         total_score = sum(item['weighted_contribution'] for item in grid_results)
 
         # 4. Determine Global Risk Label
-        if total_score > 0.65: res = "Critical Risk"
-        elif total_score > 0.35: res = "High Risk"
+        if total_score > 0.90: res = "Critical Risk"
+        elif total_score > 0.50: res = "High Risk"
         else: res = "Low Risk"
 
         print(f"--- Analysis Complete: {res} ({total_score:.4f}) ---")

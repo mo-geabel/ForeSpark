@@ -3,6 +3,7 @@ import { Link as ScrollLink } from 'react-scroll';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 interface NavbarProps {
   onStart: () => void; // You can trigger this via the Register button or a separate link
 }
@@ -17,15 +18,25 @@ export default function Navbar({ onStart }: NavbarProps) {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-[100] border-b border-emerald-100 bg-white/80 backdrop-blur-sm">
+    <nav className="fixed top-0 w-full z-[100] border-b border-emerald-100 bg-transparent/15 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         
-        {/* Brand Logo */}
-        <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-          <span className="text-2xl font-black tracking-tighter text-emerald-600 group-hover:text-emerald-500 transition-colors">
-            🔥 FIREFOREST
-          </span>
-        </div>
+       {/* Brand Logo */}
+<div 
+  className="flex items-center gap-2 group cursor-pointer" 
+  onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
+>
+  <div className="flex items-center gap-2"> {/* Changed span to div for flex control */}
+    <img
+      src={logo}
+      alt="ForestSpark Logo"
+      className="w-8 h-8 object-contain transition-transform group-hover:scale-110"
+    />
+    <span className="text-2xl font-black tracking-tighter text-emerald-600 group-hover:text-emerald-500 transition-colors">
+      FORESTSPARK
+    </span>
+  </div>
+</div>
 
         {/* Navigation Links - Hidden on Mobile */}
         <div className="hidden md:flex gap-10 text-xs font-bold uppercase tracking-widest text-slate-900">
