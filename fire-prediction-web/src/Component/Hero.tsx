@@ -44,14 +44,14 @@ export default function Hero({ onStart }: HeroProps) {
             TÜRKIYE REGION 
           </div>
         <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9] mb-8 text-slate-900">
-          AI <span className='text-red-700'>Fire</span><span className='text-emerald-600'>Forest</span> <br /> 
+          AI <span className='text-orange-500'>Fire</span><span className='text-emerald-600'>Forest</span> <br /> 
           <span className="text-slate-900">Prediction</span>
         </h1>
         <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-2xl mx-auto">
           Advanced neural networks analyzing satellite data to protect our green future.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button onClick={handleStartAnalysis} className="w-full sm:w-auto px-10 py-5 bg-emerald-600 text-white font-black rounded-2xl hover:bg-emerald-700 shadow-xl shadow-emerald-200">
+          <button onClick={handleStartAnalysis} className="w-full sm:w-auto px-10 py-5 bg-emerald-600 text-white font-black rounded-2xl hover:bg-emerald-700 shadow-sm shadow-emerald-100">
             Start Analysis
           </button>
           <button className="w-full sm:w-auto px-10 py-5 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-slate-200">

@@ -62,7 +62,7 @@ router.post('/analyze', auth, async (req, res) => {
 });
 
 router.patch('/feedback/:scanId', async (req, res) => {
-  const { isCorrect } = req.body;
+  const { isCorrect, notes } = req.body;
   console.log(isCorrect);
   try {
     const updatedScan = await Scan.findByIdAndUpdate(
@@ -70,7 +70,7 @@ router.patch('/feedback/:scanId', async (req, res) => {
       { 
         $set: { 
           'userFeedback.isCorrect': isCorrect,
-          'userFeedback.notes': "User confirmed scan result",
+          'userFeedback.notes': notes,
           'isSavedToUserHistory': isCorrect
         } 
       },

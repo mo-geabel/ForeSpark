@@ -7,15 +7,29 @@ const adminProtect = require('../Middleware/adminAuth');
 // GET all scans with user details (Master History)
 router.get('/master-history', adminProtect, async (req, res) => {
   try {
-    // 1. Find all scans
-    // 2. 'populate' replaces the userId with the actual User object
-    // 3. We only select fullName and email for security
+    // 1. Fetch all scans with user details
     const history = await Scan.find()
       .populate('userId', 'fullName email') 
-      .sort({ 'prediction.timestamp': -1 }); // Newest scans first
+      .sort({ 'prediction.timestamp': -1 });
+
+    // 2. Calculate Admin Statistics
+    const stats = {
+      total: history.length,
+      likes: history.filter(s => s.userFeedback?.isCorrect === true).length,
+      dislikes: history.filter(s => s.userFeedback?.isCorrect === false).length,
+      unreviewed: history.filter(s => s.userFeedback?.isCorrect === null).length
+    };
+
+    // Calculate Accuracy Percentage based on user feedback
+    const accuracyRate = stats.total > 0 
+      ? ((stats.likes / (stats.likes + stats.dislikes || 1)) * 100).toFixed(1) 
+      : 0;
 
     res.json({
-      totalScans: history.length,
+      summary: {
+        ...stats,
+        accuracyRate: `${accuracyRate}%`
+      },
       data: history
     });
   } catch (err) {
