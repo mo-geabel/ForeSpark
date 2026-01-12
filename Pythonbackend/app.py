@@ -8,9 +8,11 @@ import requests
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
 import os
-from dotenv import load_dotenv # Add this
-
-load_dotenv() # This loads the variables from the .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 app = Flask(__name__)
 CORS(app)
 
