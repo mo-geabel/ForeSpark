@@ -7,12 +7,15 @@ from PIL import Image
 import requests
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
+import os
+from dotenv import load_dotenv # Add this
 
+load_dotenv() # This loads the variables from the .env file
 app = Flask(__name__)
 CORS(app)
 
 # --- CONFIG ---
-MAPBOX_TOKEN = "pk.eyJ1IjoibWFtb21nZDEiLCJhIjoiY21na25kZm5uMHM1YjJtcXdqMWQzeXBheCJ9.iUkG0CnS1X49zKVsTO3gug"
+MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
 COORD_OFFSET = 0.0031
 WEIGHT_MATRIX = [
     [0.05, 0.10, 0.05],
@@ -112,4 +115,4 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(port=int(os.getenv("PORT")), debug=True)
