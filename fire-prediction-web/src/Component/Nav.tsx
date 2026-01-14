@@ -29,11 +29,11 @@ export default function Navbar({ onStart }: NavbarProps) {
   <div className="flex items-center gap-2"> {/* Changed span to div for flex control */}
     <img
       src={logo}
-      alt="ForestSpark Logo"
+      alt="ForeSpark Logo"
       className="w-8 h-8 object-contain transition-transform group-hover:scale-110"
     />
     <span className="text-2xl font-black tracking-tighter text-emerald-600 group-hover:text-emerald-500 transition-colors">
-      FORESTSPARK
+      FORESPARK
     </span>
   </div>
 </div>

@@ -12,7 +12,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
   const [mode, setMode] = useState(initialMode);
   const [formData, setFormData] = useState({email: '', password: '' , fullName: ''});
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [_, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -129,7 +129,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
           />
           
           <button type="submit" className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl shadow-lg mt-4 transition-all active:scale-95">
-            {mode === 'login' ? 'Sign In' : 'Join FireForest'}
+            {mode === 'login' ? 'Sign In' : 'Join ForeSpark'}
           </button>
         </form>
 

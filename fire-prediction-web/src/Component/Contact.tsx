@@ -28,7 +28,7 @@ export default function Contact() {
   };
 
   return (
-    <Element name="contact" className="py-32 px-6">
+    <Element name="contact" className="py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="relative group p-1">
           <div className={`absolute inset-0 blur-3xl rounded-[3rem] -z-10 transition-all duration-700 ${status === 'success' ? 'bg-emerald-500/40' : 'bg-white group-hover:bg-emerald-600/20'}`} />
@@ -42,11 +42,11 @@ export default function Contact() {
             <form ref={form} className="grid md:grid-cols-2 gap-6" onSubmit={sendEmail}>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Full Name</label>
-                <input name="from_name" required type="text" placeholder="John Doe" className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"/>
+                <input name="from_name" required type="text" placeholder="Jeff Dalton" className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"/>
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Email Address</label>
-                <input name="reply_to" required type="email" placeholder="john@example.com" className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"/>
+                <input name="reply_to" required type="email" placeholder="dalton@example.com" className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"/>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Message</label>

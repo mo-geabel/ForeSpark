@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { MoveLeftIcon, FileDownIcon } from 'lucide-react';
 
 interface ScanRecord {
   _id: string;
@@ -27,10 +28,10 @@ export default function History() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [scans, setScans] = useState<ScanRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_, setLoading] = useState(true);
 
   const downloadCSV = () => {
-    const headers = ["User", "Region", "Latitude", "Longitude", "Risk Level", "Accuracy", "Date", "User Feedback", "Notes"];
+    const headers = ["User", "Region", "Latitude", "Longitude", "Risk_Level", "Accuracy", "Date", "User_Feedback", "Notes"];
     
     const rows = scans.map(scan => [
       scan.userId?.fullName || "N/A",
@@ -49,7 +50,7 @@ export default function History() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `FireForest_Report_${new Date().toLocaleDateString()}.csv`);
+    link.setAttribute("download", `ForeSpark_Report_${new Date().toLocaleDateString()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -86,7 +87,7 @@ export default function History() {
               onClick={() => navigate('/')} 
               className="group flex items-center gap-2 text-slate-400 hover:text-emerald-600 font-bold text-xs uppercase tracking-widest transition-all mb-4"
             >
-              <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Map
+              <MoveLeftIcon size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Map
             </button>
             <h1 className="text-5xl font-black text-slate-900 tracking-tight">
               {user?.role === 'admin' ? 'Global Logs' : 'My History'}
@@ -98,7 +99,7 @@ export default function History() {
               onClick={downloadCSV}
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-4 rounded-2xl shadow-lg shadow-emerald-500/20 font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 flex items-center gap-2"
             >
-              <span>📊</span> Export CSV
+              <FileDownIcon size={18} /> Download CSV
             </button>
             <div className="bg-white border border-emerald-100 px-6 py-4 rounded-2xl shadow-sm">
               <div className="text-[10px] font-black uppercase text-slate-400">Total Records</div>

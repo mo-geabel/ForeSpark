@@ -14,7 +14,7 @@ router.post('/analyze', auth, async (req, res) => {
 
     try {
         // 1. Call Flask AI
-        const flaskResponse = await axios.post(`${process.env.api}/predict`, {
+        const flaskResponse = await axios.post(process.env.API_LOCAL, {
             lat: Number(lat),
             lng: Number(lng)
         });

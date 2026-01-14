@@ -4,6 +4,7 @@ import MapSelector from './Component/MapSelector';
 import AuthModal from './Component/Auth';
 import { AuthProvider, useAuth } from './Context/AuthContext'; 
 import History from './Component/History';
+import Documentation from './Component/Documentation';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -18,6 +19,9 @@ function App() {
         <Routes>
           {/* Landing Page */}
           <Route path="/" element={<Home onStart={() => {}} />} />
+          
+          {/* Documentation Page */}
+          <Route path="/documentation" element={<Documentation />} />
           
           {/* Auth Page */}
           <Route path="/auth" element={<AuthModal isOpen={true} onClose={() => {}} initialMode="login" />} />
