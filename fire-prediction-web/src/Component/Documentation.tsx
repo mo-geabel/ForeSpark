@@ -4,6 +4,7 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
+import Reveal from './Reveal';
 
 export default function Documentation() {
   const navigate = useNavigate();
@@ -97,46 +98,85 @@ export default function Documentation() {
         </section>
 
         {/* Training Curves */}
-        <section className="mb-20">
-          <h2 className="text-3xl font-black text-slate-900 mb-8">Training Dynamics</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white p-8 rounded-2xl border border-slate-200">
-              <h3 style={{textAlign: 'center', fontSize: 18, fontWeight: 800, color: '#334155'}}>
-                Loss Over Epochs
-              </h3>
-                <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={trainingMetrics}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="epoch" label={{ value: 'Epoch', position: 'insideBottomRight', offset: -6 }}/>
-                    <YAxis domain={[0,0.15]} label={{ value: 'Loss', angle: -90, position: 'insideLeft' }}/>
-                    <Tooltip />
-                    <Legend />
-                    <Line dataKey="trainLoss" stroke="#10b981" strokeWidth={3} isAnimationActive />
-                    <Line dataKey="valLoss" stroke="#3b82f6" strokeWidth={3} isAnimationActive />
-                </LineChart>
-                </ResponsiveContainer>
-            </div>
+       <Reveal>
+  {(visible) => (
+    <section className="mb-20">
+      <h2 className="text-3xl font-black text-slate-900 mb-8">
+        Training Dynamics
+      </h2>
 
-            <div className="bg-white p-8 rounded-2xl border border-slate-200">
-              <h3 style={{textAlign: 'center', fontSize: 18, fontWeight: 800, color: '#334155'}}>
-                Accuracy Over Epochs
-              </h3>
-                <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={trainingMetrics}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="epoch" label={{ value: 'Epoch', position: 'insideBottomRight', offset: -6 }}/>
-                    <YAxis domain={[95,100]} label={{ value: 'Accuracy (%)', angle: -90, position: 'insideLeft' }}/>
-                    <Tooltip />
-                    <Legend />
-                    <Line dataKey="trainAcc" stroke="#10b981" strokeWidth={3} isAnimationActive />
-                    <Line dataKey="valAcc" stroke="#3b82f6" strokeWidth={3} isAnimationActive />
-                </LineChart>
-                </ResponsiveContainer>
-            </div>
-          </div>
-        </section>
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* LOSS */}
+        <div className="bg-white p-8 rounded-2xl border border-slate-200">
+          <h3 style={{ textAlign: "center", fontSize: 18, fontWeight: 800 }}>
+            Loss Over Epochs
+          </h3>
+
+          {visible && (
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={trainingMetrics}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="epoch" />
+                <YAxis domain={[0, 0.15]} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  dataKey="trainLoss"
+                  stroke="#10b981"
+                  strokeWidth={3}
+                  animationDuration={3500}
+                />
+                <Line
+                  dataKey="valLoss"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                  animationDuration={3000}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+
+        {/* ACCURACY */}
+        <div className="bg-white p-8 rounded-2xl border border-slate-200">
+          <h3 style={{ textAlign: "center", fontSize: 18, fontWeight: 800 }}>
+            Accuracy Over Epochs
+          </h3>
+
+          {visible && (
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={trainingMetrics}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="epoch" />
+                <YAxis domain={[95, 100]} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  dataKey="trainAcc"
+                  stroke="#10b981"
+                  strokeWidth={3}
+                  animationDuration={3500}
+                />
+                <Line
+                  dataKey="valAcc"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                  animationDuration={3000}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+</Reveal>
+
+
 
         {/* Performance Metrics */}
+        <Reveal>
+        {(visible) => (
         <section className="mb-20">
           <h2 className="text-3xl font-black text-slate-900 mb-8">Test Set Performance</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -144,6 +184,7 @@ export default function Documentation() {
               <h3 style={{textAlign: 'center', fontSize: 18, fontWeight: 800, color: '#334155'}}>
                 Dataset Composition
               </h3>
+              {visible && (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -162,12 +203,14 @@ export default function Documentation() {
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
+              )}
             </div>
 
             <div className="bg-white p-8 rounded-2xl border border-slate-200">
               <h3 style={{textAlign: 'center', fontSize: 18, fontWeight: 800, color: '#334155'}}>
                 Test Set Metrics
               </h3>
+              {visible && (
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={performanceMetrics}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -184,11 +227,15 @@ export default function Documentation() {
                     </Bar>
                 </BarChart>
               </ResponsiveContainer>
+              )}
             </div>
           </div>
         </section>
-
+        )}
+        </Reveal>
         {/* Spatial Aggregation */}
+        <Reveal>
+
         <section className="mb-20">
           <h2 className="text-3xl font-black text-slate-900 mb-8">Spatial Aggregation Strategy</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -341,7 +388,9 @@ export default function Documentation() {
           </div>
         </section>
 
+        </Reveal>
         {/* Technical Specs */}
+
         <section className="mb-20">
           <h2 className="text-3xl font-black text-slate-900 mb-8">Technical Specifications</h2>
           
@@ -350,6 +399,8 @@ export default function Documentation() {
             <h3 className="text-xl font-bold text-slate-900 mb-6">Model Architecture Pipeline</h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {/* Input */}
+              <Reveal>
+
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-2xl border-2 border-blue-300 text-center">
                 <Image size={40} className="mx-auto text-blue-600 mb-3" />
                 <h4 className="font-bold text-slate-900 mb-2">Input</h4>
@@ -358,6 +409,7 @@ export default function Documentation() {
                 </p>
                 <p className="text-xs text-slate-600 mt-2">RGB Image</p>
               </div>
+              </Reveal>
 
               {/* Arrow */}
               <div className="flex items-center justify-center">
@@ -365,12 +417,17 @@ export default function Documentation() {
               </div>
 
               {/* Processing */}
+              <Reveal
+              delay={2}
+              ease="easeInOut">
+
               <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-3 rounded-2xl border-2 border-emerald-300 text-center md:col-span-1">
                 <Cpu size={40} className="mx-auto text-emerald-600 mb-3" />
                 <h4 className="font-bold text-slate-900 mb-2">Processing</h4>
                 <p className="text-sm text-slate-700 font-bold">MobileNetV2</p>
                 <p className="text-xs text-slate-600 mt-2">2.2M params</p>
               </div>
+              </Reveal>
 
               {/* Arrow */}
               <div className="flex items-center justify-center">
@@ -378,6 +435,7 @@ export default function Documentation() {
               </div>
 
               {/* Output */}
+              <Reveal delay={4} ease="easeInOut">
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 rounded-2xl border-2 border-orange-300 text-center">
                 <Zap size={40} className="mx-auto text-orange-600 mb-3" />
                 <h4 className="font-bold text-slate-900 mb-2">Output</h4>
@@ -386,12 +444,15 @@ export default function Documentation() {
                 </p>
                 <p className="text-xs text-slate-600 mt-2">Risk Classification</p>
               </div>
+              </Reveal>
             </div>
           </div>
 
           {/* Specs Grid */}
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {/* Model Specs */}
+
+            <Reveal ease="easeInOut">
             <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:shadow-lg transition-shadow">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-blue-500/10 rounded-lg">
@@ -426,8 +487,12 @@ export default function Documentation() {
                 </li>
               </ul>
             </div>
+            </Reveal>
+            
 
             {/* Dataset Stats */}
+            <Reveal ease="easeInOut">
+
             <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:shadow-lg transition-shadow">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-emerald-500/10 rounded-lg">
@@ -462,17 +527,18 @@ export default function Documentation() {
                 </li>
               </ul>
             </div>
+          </Reveal>
           </div>
 
           {/* Tech Stack */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-8 rounded-2xl border border-slate-700">
+          <div className="bg-blue-600 text-white p-8 rounded-2xl border-7 border-white/10">
             <div className="flex items-center gap-3 mb-6">
-              <Layers size={28} />
+              <Layers color='white' size={28} />
               <h3 className="text-xl font-bold">Technology Stack</h3>
             </div>
             <div className="grid md:grid-cols-4 gap-6">
               <div>
-                <p className="text-slate-400 text-sm font-bold mb-2 uppercase tracking-wider">Backend</p>
+                <p className="text-white text-sm font-bold mb-2 uppercase tracking-wider">Backend</p>
                 <div className="space-y-1 text-sm">
                   <p>• Express.js</p>
                   <p>• Flask</p>
@@ -480,15 +546,15 @@ export default function Documentation() {
                 </div>
               </div>
               <div>
-                <p className="text-slate-400 text-sm font-bold mb-2 uppercase tracking-wider">Frontend</p>
+                <p className="text-white text-sm font-bold mb-2 uppercase tracking-wider">Frontend</p>
                 <div className="space-y-1 text-sm">
-                  <p>• React 19</p>
+                  <p>• React</p>
                   <p>• TypeScript</p>
                   <p>• Tailwind CSS</p>
                 </div>
               </div>
               <div>
-                <p className="text-slate-400 text-sm font-bold mb-2 uppercase tracking-wider">Data</p>
+                <p className="text-white text-sm font-bold mb-2 uppercase tracking-wider">Data</p>
                 <div className="space-y-1 text-sm">
                   <p>• MongoDB</p>
                   <p>• Satellite Imagery</p>
@@ -496,7 +562,7 @@ export default function Documentation() {
                 </div>
               </div>
               <div>
-                <p className="text-slate-400 text-sm font-bold mb-2 uppercase tracking-wider">Deployment</p>
+                <p className="text-white text-sm font-bold mb-2 uppercase tracking-wider">Deployment</p>
                 <div className="space-y-1 text-sm">
                   <p>• ONNX Conversion</p>
                   <p>• Mobile Optimized</p>

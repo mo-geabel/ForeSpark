@@ -15,11 +15,11 @@ export default function About() {
           <div className="space-y-16">
             {/* Accuracy Stat */}
             <div className="flex items-center gap-6 group cursor-default">
-              <div className="p-5 bg-emerald-500/5 rounded-full group-hover:bg-emerald-500/10 group-hover:scale-110 transition-all duration-300">
-                <Target size={56} className="text-emerald-500 group-hover:rotate-180 transition-transform duration-500" strokeWidth={2} />
+              <div className="p-5 bg-emerald-500/5 rounded-full group-hover:bg-emerald-500/10">
+                <Target size={56} className="text-emerald-500" strokeWidth={2} />
               </div>
               <div>
-                <h4 className="text-6xl font-black text-emerald-500 group-hover:tracking-wider transition-all duration-300">
+                <h4 className="text-6xl font-black text-emerald-500">
                   99.5%
                 </h4>
                 <p className="text-sm text-slate-600 uppercase tracking-[0.2em] font-bold mt-2">
@@ -30,11 +30,11 @@ export default function About() {
 
             {/* Coverage Stat */}
             <div className="flex items-center gap-6 group cursor-default ml-auto w-fit">
-              <div className="order-2 p-5 bg-blue-500/5 rounded-full group-hover:bg-blue-500/10 group-hover:scale-110 transition-all duration-300">
-                <Map size={56} className="text-blue-500 group-hover:-rotate-12 transition-transform duration-500" strokeWidth={2} />
+              <div className="order-2 p-5 bg-blue-500/5 rounded-full">
+                <Map size={56} className="text-blue-500" strokeWidth={2} />
               </div>
               <div className="order-1 text-right">
-                <h4 className="text-6xl font-black text-blue-500 group-hover:tracking-wider transition-all duration-300">
+                <h4 className="text-6xl font-black text-blue-500">
                   3.7 Km²
                 </h4>
                 <p className="text-sm text-slate-600 uppercase tracking-[0.2em] font-bold mt-2">
