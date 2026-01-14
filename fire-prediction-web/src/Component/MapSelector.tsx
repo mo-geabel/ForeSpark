@@ -3,6 +3,7 @@ import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-goog
 import { useNavigate } from 'react-router-dom';
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
 import Search from './Search'; 
+import AnalysisPage from './AnalysisPage';
 
 const FeedbackSection = ({ feedback, setFeedback, initialNotes, onNotesChange }: any) => {
   // We use local state for the input to ensure focus is NEVER lost
@@ -211,8 +212,14 @@ export default function MapSelector() {
       const data = await response.json();
       if (response.ok) {
         console.log(data);
-        setAnalysisResult(data);
-        setIsModalOpen(true);
+       navigate(`/analysis/${data._id}`, {
+        state: {
+          analysisResult: data,
+          feedback,
+          userNotes: userNotesRef.current
+        }
+      });
+
       }
     } catch (err) {
       alert("Error connecting to AI service");
@@ -257,41 +264,59 @@ export default function MapSelector() {
         />
       </APIProvider>
 
-      {isModalOpen && analysisResult && (
-  <div className="fixed inset-0 z-[200] flex items-center justify-center bg-emerald-950/40 backdrop-blur-xl p-4 overflow-y-auto">
-    <div className="w-full max-w-5xl bg-white rounded-[3.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col lg:flex-row animate-in fade-in zoom-in duration-500">
+      {/* {isModalOpen && analysisResult && (
+  <div className="fixed inset-0 z-[200] flex items-center justify-center bg-emerald-950/40 backdrop-blur-xl p-2 sm:p-4 overflow-y-auto">
+    <div className="
+      w-full max-w-5xl
+      max-h-[90vh]
+      overflow-y-visible lg:overflow-y-auto
+      bg-white
+      rounded-none sm:rounded-3xl lg:rounded-[3.5rem]
+      shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]
+      flex flex-col lg:flex-row
+      animate-in fade-in zoom-in duration-500
+    ">
+
       
-      {/* Left: 3x3 Spatial Grid */}
-      <div className="lg:w-3/5 p-10 bg-emerald-50/50 border-r border-emerald-100">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-800">Spatial Grid Analysis</h3>
-            <p className="text-[10px] text-emerald-600 mt-1">9-point deep learning verification</p>
-          </div>
+      <div className="lg:w-3/5 p-5 sm:p-6 lg:p-10 bg-emerald-50/50 border-b lg:border-b-0 lg:border-r border-emerald-100">
+        <div className="mb-6">
+          <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-800">
+            Spatial Grid Analysis
+          </h3>
+          <p className="text-[9px] text-emerald-600 mt-1">
+            9-point deep learning verification
+          </p>
         </div>
 
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-1 sm:gap-2">
           {analysisResult.grid_data.map((point: any, idx: number) => (
-            <div key={idx} className="relative overflow-hidden shadow-md border-2 border-white aspect-square group">
-              <img 
-                src={`https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+            <div
+              key={idx}
+              className="relative overflow-hidden shadow-md border-2 border-white aspect-square group"
+            >
+              <img
+                src={`https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent opacity-90" />
-              
-              <div className="absolute top-3 left-3 px-2.5 py-1.5 bg-white/95 backdrop-blur-md rounded-xl text-[9px] font-black text-emerald-900 shadow-sm border border-emerald-50">
+
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent" />
+
+              <div className="absolute top-2 left-2 px-2 py-1 bg-white/95 backdrop-blur rounded-lg text-[8px] font-black text-emerald-900">
                 {point.label}
               </div>
 
-              <div className="absolute bottom-3 left-3 right-3 flex flex-col gap-1">
-                <div className="flex justify-between items-center text-[9px] font-black text-white uppercase tracking-wider">
-                  <span className={point.individual_prob > 0.4 ? "text-orange-300" : "text-emerald-300"}>
-                    {(point.individual_prob * 100).toFixed(0)}% probability
-                  </span>
-                </div>
-                <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full transition-all duration-1000 ${point.individual_prob > 0.4 ? 'bg-orange-400' : 'bg-emerald-400'}`}
+              <div className="absolute bottom-2 left-2 right-2">
+                <span className={`text-[8px] font-black uppercase ${
+                  point.individual_prob > 0.4 ? "text-orange-300" : "text-emerald-300"
+                }`}>
+                  {(point.individual_prob * 100).toFixed(0)}%
+                </span>
+
+                <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden mt-1">
+                  <div
+                    className={`h-full transition-all duration-1000 ${
+                      point.individual_prob > 0.4 ? "bg-orange-400" : "bg-emerald-400"
+                    }`}
                     style={{ width: `${point.individual_prob * 100}%` }}
                   />
                 </div>
@@ -301,61 +326,69 @@ export default function MapSelector() {
         </div>
       </div>
 
-      {/* Right: Aggregated Conclusion & Feedback Section */}
-      <div className="lg:w-2/5 p-12 flex flex-col justify-center bg-white relative">
-        <div className="mb-8">
-          <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
+      
+      <div className="lg:w-2/5 p-6 sm:p-8 lg:p-12 flex flex-col justify-center bg-white">
+        <div className="mb-6 sm:mb-8">
+          <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
             AI Verdict
           </span>
-          <h2 className={`text-5xl font-bold tracking-tighter mt-4 leading-none ${
-            analysisResult.result === "High Risk" || analysisResult.result === "Critical Risk" 
-            ? "text-red-600" : "text-emerald-600"
-          }`}>
+
+          <h2
+            className={`mt-4 font-bold tracking-tight leading-none
+              text-3xl sm:text-4xl lg:text-5xl
+              ${analysisResult.result === "High Risk" || analysisResult.result === "Critical Risk"
+                ? "text-red-600"
+                : "text-emerald-600"}
+            `}
+          >
             {analysisResult.result}
           </h2>
-          <div className="mt-8 flex items-baseline gap-3">
-            <span className="text-6xl font-medium text-slate-900 tabular-nums">
+
+          <div className="mt-6 flex items-end gap-3">
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 tabular-nums">
               {(analysisResult.total_probability * 100).toFixed(1)}%
             </span>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Model</span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Certainty</span>
-            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase leading-tight">
+              Model<br />Certainty
+            </span>
           </div>
         </div>
 
-        <FeedbackSection 
-          feedback={feedback} 
-          setFeedback={setFeedback} 
-          initialNotes={userNotesRef.current} 
-          onNotesChange={(val: string) => userNotesRef.current = val} 
+        <FeedbackSection
+          feedback={feedback}
+          setFeedback={setFeedback}
+          initialNotes={userNotesRef.current}
+          onNotesChange={(val: string) => (userNotesRef.current = val)}
         />
 
-        <div className="space-y-4">
-          <button 
-            onClick={() => handleSaveFeedback(analysisResult._id)} 
-            className="w-full py-5 bg-emerald-600 text-white rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.25em] hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200 active:scale-95"
+        <div className="space-y-3 mt-6">
+          <button
+            onClick={() => handleSaveFeedback(analysisResult._id)}
+            className="w-full py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-emerald-700 transition-all active:scale-95"
           >
-              Confirm & Save History
+            Confirm & Save History
           </button>
-          <button 
-            onClick={() => setIsModalOpen(false)} 
-            className="w-full py-5 bg-slate-50 text-slate-400 rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.25em] hover:bg-slate-100 transition-all active:scale-95"
+
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="w-full py-4 bg-slate-50 text-slate-400 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-slate-100 transition-all active:scale-95"
           >
-              Discard Scan
+            Discard Scan
           </button>
         </div>
 
-        <div className="mt-8 p-6 bg-emerald-50/50 rounded-3xl border border-emerald-100/50">
-           <p className="text-[10px] text-emerald-800 leading-relaxed italic font-medium">
-              "This report combines spatial data from surrounding areas. The weighted algorithm prioritizes central terrain while monitoring perimeter threats."
-           </p>
+        <div className="mt-6 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+          <p className="text-[9px] text-emerald-800 italic leading-relaxed">
+            "This report combines spatial data from surrounding areas. The weighted algorithm
+            prioritizes central terrain while monitoring perimeter threats."
+          </p>
         </div>
       </div>
 
     </div>
   </div>
-)}
+)} */}
+
     </div>
   );
 }

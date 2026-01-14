@@ -124,13 +124,14 @@ export default function Documentation() {
                   dataKey="trainLoss"
                   stroke="#10b981"
                   strokeWidth={3}
-                  animationDuration={3500}
+                  animationDuration={2000}
                 />
                 <Line
                   dataKey="valLoss"
                   stroke="#3b82f6"
                   strokeWidth={3}
-                  animationDuration={3000}
+                  animationDuration={2000}
+                  animationBegin={2000}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -155,13 +156,14 @@ export default function Documentation() {
                   dataKey="trainAcc"
                   stroke="#10b981"
                   strokeWidth={3}
-                  animationDuration={3500}
+                  animationDuration={2000}
                 />
                 <Line
                   dataKey="valAcc"
                   stroke="#3b82f6"
                   strokeWidth={3}
-                  animationDuration={3000}
+                  animationDuration={2000}
+                  animationBegin={2000}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -418,8 +420,9 @@ export default function Documentation() {
 
               {/* Processing */}
               <Reveal
-              delay={2}
-              ease="easeInOut">
+              delay={0.5}
+              ease="easeInOut"
+              slide="x">
 
               <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-3 rounded-2xl border-2 border-emerald-300 text-center md:col-span-1">
                 <Cpu size={40} className="mx-auto text-emerald-600 mb-3" />
@@ -435,7 +438,7 @@ export default function Documentation() {
               </div>
 
               {/* Output */}
-              <Reveal delay={4} ease="easeInOut">
+              <Reveal delay={1} ease="easeOut" slide="x">
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 rounded-2xl border-2 border-orange-300 text-center">
                 <Zap size={40} className="mx-auto text-orange-600 mb-3" />
                 <h4 className="font-bold text-slate-900 mb-2">Output</h4>

@@ -5,6 +5,7 @@ import AuthModal from './Component/Auth';
 import { AuthProvider, useAuth } from './Context/AuthContext'; 
 import History from './Component/History';
 import Documentation from './Component/Documentation';
+import AnalysisPage from './Component/AnalysisPage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -33,6 +34,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <MapSelector />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/analysis/:id" 
+            element={
+              <ProtectedRoute>
+                <AnalysisPage />
               </ProtectedRoute>
             } 
           />

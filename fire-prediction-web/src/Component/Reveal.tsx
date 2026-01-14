@@ -6,6 +6,7 @@ type RevealProps = {
   delay?: number;
   duration?: number;
   ease?: "easeOut" | "easeIn" | "easeInOut" | "linear";
+  slide?:"x" | "y"
 };
 
 export default function Reveal({
@@ -13,16 +14,18 @@ export default function Reveal({
   delay = 0,
   duration = 0.6,
   ease = "easeOut",
+  slide = "y"
 }: RevealProps) {
   const [visible, setVisible] = useState(false);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, [slide]: 40 }}
+      whileInView={{ opacity: 1, [slide]: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration, ease, delay }}
       onViewportEnter={() => setVisible(true)}
+
     >
       {typeof children === "function" ? children(visible) : children}
     </motion.div>

@@ -14,11 +14,7 @@ router.post('/analyze', auth, async (req, res) => {
 
     try {
         // 1. Call Flask AI
-<<<<<<< Updated upstream
         const flaskResponse = await axios.post(process.env.API_LOCAL, {
-=======
-        const flaskResponse = await axios.post(process.env.API_HOST, {
->>>>>>> Stashed changes
             lat: Number(lat),
             lng: Number(lng)
         });
