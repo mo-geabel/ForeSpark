@@ -15,7 +15,7 @@ export default function About() {
           <div className="space-y-16">
             {/* Accuracy Stat */}
             <div className="flex items-center gap-6 group cursor-default">
-              <div className="p-5 bg-emerald-500/5 rounded-full group-hover:bg-emerald-500/10">
+              <div className="p-5 bg-emerald-500/5 rounded-full">
                 <Target size={56} className="text-emerald-500" strokeWidth={2} />
               </div>
               <div>

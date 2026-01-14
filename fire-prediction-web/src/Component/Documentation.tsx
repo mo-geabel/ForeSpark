@@ -577,6 +577,10 @@ export default function Documentation() {
         </section>
 
       </div>
+      <footer className="py-16 text-center text-slate-600 border-t border-white/5">
+        <div className="mb-4 font-black tracking-tighter text-xl text-emerald-500/50">FORESPARK</div>
+        <p className="text-[10px] uppercase tracking-[0.5em]">© 2026 Protecting our Green Future</p>
+      </footer>
     </div>
   );
 }
