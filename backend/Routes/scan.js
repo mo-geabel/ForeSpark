@@ -11,6 +11,7 @@ dotenv.config();
 // @access   Private
 router.post('/analyze', auth, async (req, res) => {
     const { lat, lng, name } = req.body;
+    console.log(lat, lng, name);
 
     try {
         // 1. Call Flask AI
@@ -75,7 +76,7 @@ router.patch('/feedback/:scanId', async (req, res) => {
         $set: { 
           'userFeedback.isCorrect': isCorrect,
           'userFeedback.notes': notes,
-          'isSavedToUserHistory': isCorrect
+          'isSavedToUserHistory': true
         } 
       },
       { new: true }
