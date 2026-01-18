@@ -61,12 +61,39 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
   const navigate = useNavigate();
   const map = useMap();
   const [mapType, setMapType] = useState<string>('satellite');
+  // Try to restore last viewed viewport from localStorage
+  const savedViewport = (() => {
+    try {
+      const raw = localStorage.getItem('lastMapViewport');
+      return raw ? JSON.parse(raw) as { lat: number; lng: number; zoom: number } : null;
+    } catch (e) {
+      return null;
+    }
+  })();
   useEffect(() => {
     if (map && markerPos) {
       map.panTo(markerPos); // Move camera to new coordinates
       map.setZoom(12);      // Zoom in for better detail of the searched area
     }
   }, [map, markerPos]);    // Trigger whenever map loads or markerPos updates
+
+  // Persist viewport (center & zoom) whenever the map becomes idle
+  useEffect(() => {
+    if (!map) return;
+    const saveViewport = () => {
+      try {
+        const c = map.getCenter();
+        if (!c) return;
+        const viewport = { lat: c.lat(), lng: c.lng(), zoom: map.getZoom() || 6 };
+        localStorage.setItem('lastMapViewport', JSON.stringify(viewport));
+      } catch (err) {
+        // ignore storage errors
+      }
+    };
+
+    const idleListener = map.addListener('idle', saveViewport);
+    return () => idleListener?.remove();
+  }, [map]);
   const handleFindMe = () => {
     if (!navigator.geolocation) return alert("Geolocation not supported");
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -111,8 +138,8 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
       {/* --- GOOGLE MAP --- */}
       <Map
         style={{ width: '100%', height: '100%' }}
-        defaultCenter={{ lat: 39.0, lng: 35.0 }}
-        defaultZoom={6}
+        defaultCenter={savedViewport ? { lat: savedViewport.lat, lng: savedViewport.lng } : { lat: 39.0, lng: 35.0 }}
+        defaultZoom={savedViewport ? savedViewport.zoom : 6}
         mapTypeId={mapType}
         gestureHandling={'greedy'}
         disableDefaultUI={true}
