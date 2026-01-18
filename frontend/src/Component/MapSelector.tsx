@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { useNavigate } from 'react-router-dom';
-import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
+import { HandThumbUpIcon, HandThumbDownIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import Search from './Search'; 
-import AnalysisPage from './AnalysisPage';
 
 const FeedbackSection = ({ feedback, setFeedback, initialNotes, onNotesChange }: any) => {
   // We use local state for the input to ensure focus is NEVER lost
@@ -140,7 +139,7 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
 
       {/* --- ACTION BUTTONS --- */}
       <div className="absolute bottom-32 right-6 z-50 flex flex-col gap-2">
-        <button onClick={handleFindMe} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl text-lg">🎯</button>
+        <button onClick={handleFindMe} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl text-lg"><MapPinIcon className="h-6 w-6"/></button>
         <button onClick={() => map?.setZoom((map.getZoom() || 10) + 1)} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl font-bold">+</button>
         <button onClick={() => map?.setZoom((map.getZoom() || 10) - 1)} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl font-bold">−</button>
       </div>
