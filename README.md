@@ -7,7 +7,7 @@
 ## 🚀 System Architecture
 ForeSpark is built on a **Tri-Service Microservice Architecture** to ensure clean separation of concerns and high-performance inference:
 
-1.  **Frontend (React/Vite):** A high-end spatial dashboard using **Mapbox GL** for real-time coordinate selection and risk visualization.
+1.  **Frontend (React/Vite):** A high-end spatial dashboard using **Google Map** for real-time coordinate selection and risk visualization.
 2.  **API Gateway (Node.js/Express):** Manages user authentication (JWT), scan history persistence (MongoDB), and handles the secure relay to the AI engine.
 3.  **AI Engine (Python/Flask):** A dedicated inference server that pulls satellite snapshots via **Mapbox Static Images API** and processes them through a custom-trained **MobileNetV2** model.
 
@@ -24,9 +24,8 @@ Unlike standard point-based analysis, ForeSpark uses a **9-Point Spatial Grid St
 ---
 ## 🛠️ Technology Stack
 
-### 🖥️ Frontend & Mobile
+### 🖥️ Frontend
 * **Web Dashboard:** React 18 powered by Vite for a high-performance, reactive user interface.
-* **Mobile Experience:** React Native & Expo providing a native iOS and Android application.
 * **Spatial Visualization:** Mapbox GL & Mapbox Static API for high-resolution satellite imagery and interactive mapping.
 * **Modern Styling:** Tailwind CSS and NativeWind for a sleek, consistent design language across all devices.
 
@@ -75,7 +74,7 @@ npm run dev
 cd frontend
 npm install
 # Create a .env file with: 
-# VITE_MAPBOX_TOKEN, VITE_API_URL
+#VITE_GOOGLE_MAPS_API_KEY, VITE_API_URL
 npm run dev
 ```
 ## 📋 Key Features
@@ -104,44 +103,6 @@ npm run dev
 
 * Export scan history, user feedback, and model performance metrics
 * Useful for **environmental analysis, audits, and reporting**
-
-
-## 🛡️ Production & Memory Optimization
-
-To successfully deploy this system on **Render Free Tier (512 MB RAM)**, several critical memory and performance optimizations were implemented:
-
-### ⚙️ CPU-Only PyTorch
-
-* Installed PyTorch using **CPU-only index URLs**
-* Avoided heavy CUDA binaries, significantly reducing container size and RAM usage
-
-### 🧠 Gradient Suppression
-
-* Disabled gradient tracking globally using:
-
-  ```python
-  torch.set_grad_enabled(False)
-  ```
-* Reduced inference-time memory consumption by approximately **150 MB**
-* Optimized the system strictly for inference (no training in production)
-
-### 🚀 Gunicorn Preloading Strategy
-
-* Enabled model preloading using:
-
-  ```bash
-  gunicorn --preload --workers 1
-  ```
-* Ensures the AI model is loaded **before** handling incoming requests
-* Prevents repeated model loading per worker
-* Effectively avoids **OOM (Out Of Memory) crashes** on low-resource environments
-
-### 📉 Result
-
-* Stable deployment within **512 MB RAM**
-* Faster cold starts
-* Predictable and controlled memory usage
-
 
 ### 📄 License
 #### This project is licensed under the MIT License - see the LICENSE file for details.
