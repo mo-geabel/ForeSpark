@@ -15,6 +15,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
   const [_, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   if (!isOpen) return null;
 
@@ -22,7 +23,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
     setError('');
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/google', {
+      const response = await fetch(`${API_URL}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken: credentialResponse.credential }),
@@ -55,7 +56,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
     const endpoint = mode === 'login' ? '/login' : '/register';
     
     try {
-      const response = await fetch(`/api/auth${endpoint}`, {
+      const response = await fetch(`${API_URL}/api/auth${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

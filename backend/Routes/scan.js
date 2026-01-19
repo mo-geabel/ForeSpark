@@ -12,6 +12,7 @@ dotenv.config();
 router.post('/analyze', auth, async (req, res) => {
     const { lat, lng, name } = req.body;
     console.log(lat, lng, name);
+    console.log(process.env.API_LOCAL);
 
     try {
         // 1. Call Flask AI

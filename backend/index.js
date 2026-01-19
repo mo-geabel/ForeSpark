@@ -8,13 +8,7 @@ const app = express();
 const cors = require("cors");
 dotenv.config();
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Allow your React app
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "x-auth-token"],
-  })
-);
+app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 // Add this line with your other middlewares in server.

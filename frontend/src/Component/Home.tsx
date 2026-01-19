@@ -11,7 +11,7 @@ interface HomeProps {
 export default function Home({ onStart }: HomeProps) {
   return (
 <div className="min-h-screen w-full bg-white overflow-y-auto overflow-x-hidden">
-        <Navbar onStart={onStart} />
+        <Navbar />
       
       <main>
         {/* We keep Hero wrapped in Element here if name is defined in Navbar */}

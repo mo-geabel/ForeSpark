@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< Updated upstream:frontend/src/Component/MapSelector.tsx
 import { HandThumbUpIcon, HandThumbDownIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import Search from './Search'; 
 
@@ -54,6 +55,9 @@ const FeedbackSection = ({ feedback, setFeedback, initialNotes, onNotesChange }:
     </div>
   );
 };
+=======
+import Search from './Search'; 
+>>>>>>> Stashed changes:fire-prediction-web/src/Component/MapSelector.tsx
 
 function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handleAnalyze }: any) {
   // This must be OUTSIDE MapSelector to keep focus stable
@@ -193,9 +197,7 @@ export default function MapSelector() {
   const [markerPos, setMarkerPos] = useState<google.maps.LatLngLiteral | null>(null);
   const [placeName, setPlaceName] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [feedback, setFeedback] = useState<boolean | null>(null);
+  const feedback = useRef<boolean | null>(null);
   const userNotesRef = useRef("");
   const navigate = useNavigate();
 
@@ -227,7 +229,7 @@ export default function MapSelector() {
     if (!markerPos) return;
     setIsAnalyzing(true);
     try {
-      const response = await fetch('http://localhost:5000/api/scans/analyze', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/scans/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -254,29 +256,6 @@ export default function MapSelector() {
     }
   };
 
-    const handleSaveFeedback = async (scanId: string) => {
-    const token = localStorage.getItem('fireforest_token');
-    try {
-      const response = await fetch(`http://localhost:5000/api/scans/feedback/${scanId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token || ''
-        },
-        body: JSON.stringify({ 
-          isCorrect: feedback, 
-          notes: userNotesRef.current 
-        })
-      });
-
-      if (response.ok) {
-        setIsModalOpen(false);
-        navigate('/history');
-      }
-    } catch (err) {
-      console.error("Feedback error:", err);
-    }
-  };
 
   return (
     <div className="h-screen w-screen relative bg-slate-100">

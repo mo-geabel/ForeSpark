@@ -1,14 +1,10 @@
-import React from 'react';
 import { Link as ScrollLink } from 'react-scroll';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-interface NavbarProps {
-  onStart: () => void; // You can trigger this via the Register button or a separate link
-}
 
-export default function Navbar({ onStart }: NavbarProps) {
+export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 

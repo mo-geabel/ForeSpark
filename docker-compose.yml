@@ -1,0 +1,43 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  python-backend:
+    build: ./Pythonbackend
+    container_name: python-api
+    env_file:
+      - ./Pythonbackend/.env
+    ports:
+      - "5001:5001"
+
+  node-backend:
+    build: ./backend
+    container_name: node-api
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - mongo
+      - python-backend
+
+  react-frontend:
+    build: ./fire-prediction-web
+    container_name: react-app
+    ports:
+      - "3000:80"
+    depends_on:
+      - node-backend
+
+volumes:
+  mongo_data:
