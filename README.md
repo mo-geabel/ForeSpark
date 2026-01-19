@@ -54,7 +54,7 @@ cd ForeSpark
 ```
 ### 2.Python AI Service Setup
 ```bash
-cd ai-service
+cd Pythonbackend
 pip install -r requirements.txt
 python app.py 
 # Service runs on http://localhost:5001
