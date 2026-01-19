@@ -198,7 +198,7 @@ export default function AnalysisPage() {
               {(analysisResult.total_probability * 100).toFixed(1)}%
             </span>
             <span className="text-[10px] font-bold text-slate-400 uppercase leading-tight">
-              Model<br />Certainty
+              Estimated<br />Risk
             </span>
           </div>
         </div>
