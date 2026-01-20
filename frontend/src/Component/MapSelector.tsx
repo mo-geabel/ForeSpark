@@ -1,63 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< Updated upstream:frontend/src/Component/MapSelector.tsx
-import { HandThumbUpIcon, HandThumbDownIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon } from '@heroicons/react/24/outline';
 import Search from './Search'; 
-
-const FeedbackSection = ({ feedback, setFeedback, initialNotes, onNotesChange }: any) => {
-  // We use local state for the input to ensure focus is NEVER lost
-  const [localNotes, setLocalNotes] = useState(initialNotes);
-
-  // Sync local typing to the parent state
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    const val = e.target.value;
-    setLocalNotes(val);
-    onNotesChange(val); // Update parent ref
-  };
-
-  return (
-    <div 
-      className="mb-4 p-4 bg-slate-50/50 rounded-2xl border border-slate-100" 
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">
-          Accuracy
-        </span>
-        <div className="flex gap-2">
-          <button 
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setFeedback(true); }}
-            className={`p-2 rounded-lg transition-all ${feedback === true ? 'bg-emerald-600 text-white' : 'bg-white text-slate-400 border border-slate-100'}`}
-          >
-            <HandThumbUpIcon className="w-5 h-5" />
-          </button>
-          <button 
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setFeedback(false); }}
-            className={`p-2 rounded-lg transition-all ${feedback === false ? 'bg-red-600 text-white' : 'bg-white text-slate-400 border border-slate-100'}`}
-          >
-            <HandThumbDownIcon className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-      
-      <input 
-        type="text"
-        value={localNotes}
-        onChange={handleChange}
-        onKeyDown={(e) => e.stopPropagation()} 
-        placeholder="Small note (optional)..."
-        className="w-full bg-white border border-slate-100 p-2 rounded-xl text-[10px] outline-none focus:border-emerald-500/50 transition-all text-slate-700"
-      />
-    </div>
-  );
-};
-=======
-import Search from './Search'; 
->>>>>>> Stashed changes:fire-prediction-web/src/Component/MapSelector.tsx
 
 function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handleAnalyze }: any) {
   // This must be OUTSIDE MapSelector to keep focus stable

@@ -1,23 +1,23 @@
 services:
-  mongo:
+  forspark-mongo:
     image: mongo:6
-    container_name: mongodb
+    container_name: forspark-mongodb
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
 
-  python-backend:
+  forspark-python-api:
     build: ./Pythonbackend
-    container_name: python-api
+    container_name: forspark-python-api
     env_file:
       - ./Pythonbackend/.env
     ports:
       - "5001:5001"
 
-  node-backend:
+  forspark-node-api:
     build: ./backend
-    container_name: node-api
+    container_name: forspark-node-api
     env_file:
       - ./backend/.env
     ports:
@@ -28,16 +28,16 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
-      - mongo
-      - python-backend
+      - forspark-mongo
+      - forspark-python-api
 
-  react-frontend:
+  forspark-frontend:
     build: ./frontend
-    container_name: react-app
+    container_name: forspark-frontend
     ports:
       - "3000:80"
     depends_on:
-      - node-backend
+      - forspark-node-api
 
 volumes:
   mongo_data:

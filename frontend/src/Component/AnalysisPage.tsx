@@ -1,9 +1,5 @@
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-<<<<<<< Updated upstream:frontend/src/Component/AnalysisPage.tsx
-import { useState, useEffect } from "react";
-=======
 import { useState, useEffect} from "react";
->>>>>>> Stashed changes:fire-prediction-web/src/Component/AnalysisPage.tsx
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
 
 /* =========================
