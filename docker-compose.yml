@@ -32,7 +32,7 @@ services:
       - python-backend
 
   react-frontend:
-    build: ./fire-prediction-web
+    build: ./frontend
     container_name: react-app
     ports:
       - "3000:80"
