@@ -73,6 +73,7 @@ export default function AnalysisPage() {
   );
   const [feedback, setFeedback] = useState<boolean | null>(null);
   const [notes, setNotes] = useState("");
+  const [showHeatmap, setShowHeatmap] = useState(false);
 
   /* Fetch if page refreshed */
   useEffect(() => {
@@ -144,7 +145,13 @@ export default function AnalysisPage() {
               className="relative overflow-hidden shadow-md border-2 border-white aspect-square group"
             >
               <img
-                src={`https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`}
+                src={
+                  showHeatmap && point.explanation_img
+                    ? `data:image/jpeg;base64,${point.explanation_img}`
+                    : point.original_img
+                      ? `data:image/jpeg;base64,${point.original_img}`
+                      : `https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`
+                }
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
 
@@ -211,6 +218,17 @@ export default function AnalysisPage() {
           />
 
         <div className="space-y-3 mt-6">
+          <button
+            onClick={() => setShowHeatmap(!showHeatmap)}
+            className={`w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] transition-all active:scale-95 border ${
+              showHeatmap 
+                ? "bg-orange-500 text-white border-orange-400 hover:bg-orange-600" 
+                : "bg-white text-emerald-600 border-emerald-100 hover:bg-emerald-50"
+            }`}
+          >
+            {showHeatmap ? "View Satellite" : "View Heatmap (XAI)"}
+          </button>
+
           <button
             onClick={() => handleSaveFeedback(analysisResult._id)}
             className="w-full py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-emerald-700 transition-all active:scale-95"

@@ -8,6 +8,7 @@ const adminProtect = require('../Middleware/adminAuth');
 router.get('/master-history', adminProtect, async (req, res) => {
   try {
     // 1. Fetch all scans with user details
+    console.log("Fetching master history...");
     const history = await Scan.find()
       .populate('userId', 'fullName email') 
       .sort({ 'prediction.timestamp': -1 });

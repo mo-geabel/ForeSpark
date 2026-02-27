@@ -87,7 +87,7 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
       {/* --- GOOGLE MAP --- */}
       <Map
         style={{ width: '100%', height: '100%' }}
-        defaultCenter={savedViewport ? { lat: savedViewport.lat, lng: savedViewport.lng } : { lat: 39.0, lng: 35.0 }}
+        defaultCenter={savedViewport ? { lat: savedViewport.lat, lng: savedViewport.lng } : { lat: 55, lng: -110 }}
         defaultZoom={savedViewport ? savedViewport.zoom : 6}
         mapTypeId={mapType}
         gestureHandling={'greedy'}

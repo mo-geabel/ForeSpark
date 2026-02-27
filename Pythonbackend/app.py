@@ -8,11 +8,21 @@ import requests
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
 import os
+import numpy as np
+import cv2
+import base64
+
+# XAI Imports
+from pytorch_grad_cam import GradCAMPlusPlus
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+from pytorch_grad_cam.utils.image import show_cam_on_image
+
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
     pass
+
 app = Flask(__name__)
 CORS(app)
 
@@ -27,58 +37,97 @@ WEIGHT_MATRIX = [
 
 # --- MODEL SETUP ---
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = models.mobilenet_v2(pretrained=False)
+model = models.mobilenet_v2(weights=None) # pretrained=False is deprecated
 num_ftrs = model.classifier[1].in_features
 model.classifier[1] = nn.Linear(num_ftrs, 2) 
 model.load_state_dict(torch.load('best_wildfire_model_MobileNetV2.pth', map_location=device))
 model.to(device)
 model.eval()
 
+# Grad-CAM Engine Setup
+target_layer = [model.features[18]] # Last conv layer of MobileNetV2
+cam_engine = GradCAMPlusPlus(model=model, target_layers=target_layer)
+
+# Transforms
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
+# For XAI overlay, we need a simple [0,1] version of the image
+raw_transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor()
+])
+
+def pil_to_base64(pil_img):
+    """Helper to convert PIL image to base64 string for React"""
+    buffered = BytesIO()
+    pil_img.save(buffered, format="JPEG")
+    return base64.b64encode(buffered.getvalue()).decode('utf-8')
+
 def process_point(args):
-    """Processes a single grid point and returns full metadata for React"""
     lat, lng, weight, label = args
-    print(f"[SCANNING] Point: {label} at ({lat}, {lng})")
-    
+    print(f"DEBUG: [ {label} ] Starting processing...")
     try:
-        # We still use Mapbox for the AI to analyze (best for forest detail)
         url = f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lng},{lat},15,0/350x350?access_token={MAPBOX_TOKEN}&logo=false&attribution=false"
-        resp = requests.get(url, timeout=5)
+        resp = requests.get(url, timeout=10)
         
         if resp.status_code == 200:
-            img = Image.open(BytesIO(resp.content)).convert('RGB')
-            img_t = transform(img).unsqueeze(0).to(device)
+            print(f"DEBUG: [ {label} ] Image fetched. Scaling to 224...")
+            # Unify everything on the 224x224 input size
+            full_img = Image.open(BytesIO(resp.content)).convert('RGB')
+            base_img = full_img.resize((224, 224))
             
+            # 1. Prepare Tensors
+            img_tensor = transforms.ToTensor()(base_img).unsqueeze(0).to(device)
+            img_normalized = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])(img_tensor)
+            
+            # For XAI overlay, we need [0,1] numpy version (224, 224, 3)
+            raw_img_np = transforms.ToTensor()(base_img).permute(1, 2, 0).numpy()
+
+            # 2. Run Inference
+            print(f"DEBUG: [ {label} ] Model Inference...")
             with torch.no_grad():
-                outputs = model(img_t)
+                outputs = model(img_normalized)
                 probs = torch.nn.functional.softmax(outputs[0], dim=0)
                 high_risk_prob = float(probs[1].item())
-                
+
+            # 3. Generate Grad-CAM Overlay
+            print(f"DEBUG: [ {label} ] Grad-CAM...")
+            targets = [ClassifierOutputTarget(1)] 
+            # Force everything to be serial and simple to avoid segmentation fault
+            grayscale_cam = cam_engine(input_tensor=img_normalized, targets=targets, aug_smooth=False, eigen_smooth=False)[0]
+            
+            # Create RGB Heatmap overlay
+            cam_image = show_cam_on_image(raw_img_np, grayscale_cam, use_rgb=True)
+            cam_pil = Image.fromarray(cam_image)
+
+            print(f"DEBUG: [ {label} ] Done.")
             return {
                 "label": label,
-                "lat": lat,
-                "lng": lng,
                 "individual_prob": round(high_risk_prob, 4),
                 "weighted_contribution": round(high_risk_prob * weight, 4),
-                "weight_used": weight
+                "original_img": pil_to_base64(base_img),
+                "explanation_img": pil_to_base64(cam_pil)
             }
         else:
-            return {"label": label, "error": "Mapbox error", "individual_prob": 0, "weighted_contribution": 0, "weight_used": weight}
+            print(f"DEBUG: [ {label} ] Mapbox error: {resp.status_code}")
+            return {"label": label, "error": f"Mapbox error: {resp.status_code}"}
     except Exception as e:
-        return {"label": label, "error": str(e), "individual_prob": 0, "weighted_contribution": 0, "weight_used": weight}
+        print(f"DEBUG: [ {label} ] ERROR: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return {"label": label, "error": str(e)}
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    print("hello")
     try:
         data = request.json
         c_lat, c_lng = data.get('lat'), data.get('lng')
         
-        # 1. Prepare 9 grid tasks
         tasks = []
         labels = ["NW", "N", "NE", "W", "CENTER", "E", "SW", "S", "SE"]
         idx = 0
@@ -92,24 +141,19 @@ def predict():
                 ))
                 idx += 1
 
-        # 2. Execute parallel scanning
-        with ThreadPoolExecutor(max_workers=9) as executor:
+        with ThreadPoolExecutor(max_workers=1) as executor:
             grid_results = list(executor.map(process_point, tasks))
 
-        # 3. Calculate Final Weighted Score
-        total_score = sum(item['weighted_contribution'] for item in grid_results)
+        total_score = sum(item.get('weighted_contribution', 0) for item in grid_results)
 
-        # 4. Determine Global Risk Label
-        if total_score > 0.90: res = "Critical Risk"
-        elif total_score > 0.50: res = "High Risk"
+        if total_score > 0.85: res = "Critical Risk"
+        elif total_score > 0.45: res = "High Risk"
         else: res = "Low Risk"
-
-        print(f"--- Analysis Complete: {res} ({total_score:.4f}) ---")
 
         return jsonify({
             "result": res,
             "total_probability": round(total_score, 4),
-            "grid_data": grid_results, # All 9 photos' data for React
+            "grid_data": grid_results, 
             "center_coords": {"lat": c_lat, "lng": c_lng}
         })
 
