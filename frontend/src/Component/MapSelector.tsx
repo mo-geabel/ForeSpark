@@ -22,7 +22,6 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
   useEffect(() => {
     if (map && markerPos) {
       map.panTo(markerPos); // Move camera to new coordinates
-      map.setZoom(12);      // Zoom in for better detail of the searched area
     }
   }, [map, markerPos]);    // Trigger whenever map loads or markerPos updates
 
