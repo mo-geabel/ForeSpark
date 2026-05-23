@@ -28,7 +28,9 @@ CORS(app)
 
 # --- CONFIG ---
 MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
-COORD_OFFSET = 0.0031
+OFFSET_X = 0.0085   # longitude offset — change to tune horizontal tile spacing
+OFFSET_Y = 0.0060   # latitude offset  — change to tune vertical tile spacing
+
 WEIGHT_MATRIX = [
     [0.05, 0.10, 0.05],
     [0.10, 0.40, 0.10],
@@ -72,6 +74,7 @@ def process_point(args):
     print(f"DEBUG: [ {label} ] Starting processing...")
     try:
         url = f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lng},{lat},15,0/350x350?access_token={MAPBOX_TOKEN}&logo=false&attribution=false"
+        print(f"DEBUG: [ {label} ] URL → {url}")
         resp = requests.get(url, timeout=10)
         
         if resp.status_code == 200:
@@ -107,6 +110,9 @@ def process_point(args):
             print(f"DEBUG: [ {label} ] Done.")
             return {
                 "label": label,
+                "lat": lat,
+                "lng": lng,
+                "mapbox_url": url,
                 "individual_prob": round(high_risk_prob, 4),
                 "weighted_contribution": round(high_risk_prob * weight, 4),
                 "original_img": pil_to_base64(base_img),
@@ -114,12 +120,12 @@ def process_point(args):
             }
         else:
             print(f"DEBUG: [ {label} ] Mapbox error: {resp.status_code}")
-            return {"label": label, "error": f"Mapbox error: {resp.status_code}"}
+            return {"label": label, "lat": lat, "lng": lng, "mapbox_url": url, "error": f"Mapbox error: {resp.status_code}"}
     except Exception as e:
         print(f"DEBUG: [ {label} ] ERROR: {str(e)}")
         import traceback
         traceback.print_exc()
-        return {"label": label, "error": str(e)}
+        return {"label": label, "lat": lat, "lng": lng, "mapbox_url": url, "error": str(e)}
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -128,18 +134,32 @@ def predict():
         data = request.json
         c_lat, c_lng = data.get('lat'), data.get('lng')
         
-        tasks = []
-        labels = ["NW", "N", "NE", "W", "CENTER", "E", "SW", "S", "SE"]
-        idx = 0
-        for i, lat_s in enumerate([1, 0, -1]):
-            for j, lng_s in enumerate([-1, 0, 1]):
-                tasks.append((
-                    c_lat + (lat_s * COORD_OFFSET), 
-                    c_lng + (lng_s * COORD_OFFSET), 
-                    WEIGHT_MATRIX[i][j],
-                    labels[idx]
-                ))
-                idx += 1
+        labels  = ["NW",  "N",  "NE",  "W",  "CENTER",  "E",  "SW",  "S",  "SE"]
+        coords  = [
+            (c_lat + OFFSET_Y, c_lng - OFFSET_X),
+            (c_lat + OFFSET_Y, c_lng),
+            (c_lat + OFFSET_Y, c_lng + OFFSET_X),
+            (c_lat,            c_lng - OFFSET_X),
+            (c_lat,            c_lng),
+            (c_lat,            c_lng + OFFSET_X),
+            (c_lat - OFFSET_Y, c_lng - OFFSET_X),
+            (c_lat - OFFSET_Y, c_lng),
+            (c_lat - OFFSET_Y, c_lng + OFFSET_X),
+        ]
+        weights = [
+            WEIGHT_MATRIX[0][0], WEIGHT_MATRIX[0][1], WEIGHT_MATRIX[0][2],
+            WEIGHT_MATRIX[1][0], WEIGHT_MATRIX[1][1], WEIGHT_MATRIX[1][2],
+            WEIGHT_MATRIX[2][0], WEIGHT_MATRIX[2][1], WEIGHT_MATRIX[2][2],
+        ]
+        
+        # --- DEBUG ALIGNMENT PRINT (Same as test_urls.py) ---
+        print(f"\n[DEBUG ALIGNMENT] OFFSET = ({OFFSET_X}, {OFFSET_Y}) | center = ({c_lat}, {c_lng})")
+        for lbl, (lat, lng) in zip(labels, coords):
+            url = f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lng},{lat},15,0/350x350?access_token={MAPBOX_TOKEN}&logo=false&attribution=false"
+            print(f"[{lbl}]  {url}\n")
+        print("[DEBUG ALIGNMENT] Starting image processing grid...\n")
+
+        tasks = [(lat, lng, w, lbl) for (lat, lng), w, lbl in zip(coords, weights, labels)]
 
         with ThreadPoolExecutor(max_workers=1) as executor:
             grid_results = list(executor.map(process_point, tasks))

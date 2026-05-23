@@ -28,6 +28,7 @@ const ScanSchema = new mongoose.Schema({
     label: String, // "NW", "CENTER"
     lat: Number,
     lng: Number,
+    mapbox_url: String,
     individual_prob: Number,
     weight_used: Number
   }],

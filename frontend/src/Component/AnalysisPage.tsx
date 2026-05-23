@@ -1,5 +1,5 @@
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
 
 /* =========================
@@ -26,22 +26,20 @@ function FeedbackSection({
         <div className="flex gap-2">
           <button
             onClick={() => setFeedback(true)}
-            className={`p-2 rounded-lg transition-all ${
-              feedback === true
+            className={`p-2 rounded-lg transition-all ${feedback === true
                 ? "bg-emerald-600 text-white"
                 : "bg-white text-slate-400 border border-slate-100"
-            }`}
+              }`}
           >
             <HandThumbUpIcon className="w-5 h-5" />
           </button>
 
           <button
             onClick={() => setFeedback(false)}
-            className={`p-2 rounded-lg transition-all ${
-              feedback === false
+            className={`p-2 rounded-lg transition-all ${feedback === false
                 ? "bg-red-600 text-white"
                 : "bg-white text-slate-400 border border-slate-100"
-            }`}
+              }`}
           >
             <HandThumbDownIcon className="w-5 h-5" />
           </button>
@@ -138,121 +136,120 @@ export default function AnalysisPage() {
             9-point deep learning verification
           </p>
 
-          <div className="grid grid-cols-3 gap-2">
-           {analysisResult.grid_data.map((point: any, idx: number) => (
-            <div
-              key={idx}
-              className="relative overflow-hidden shadow-md border-2 border-white aspect-square group"
-            >
-              <img
-                src={
-                  showHeatmap && point.explanation_img
-                    ? `data:image/jpeg;base64,${point.explanation_img}`
-                    : point.original_img
-                      ? `data:image/jpeg;base64,${point.original_img}`
-                      : `https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`
-                }
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+          <div className="grid grid-cols-3 gap-2 overflow-hidden rounded-2xl shadow-xl border border-emerald-100/50">
+            {analysisResult.grid_data.map((point: any, idx: number) => (
+              <div
+                key={idx}
+                className="relative overflow-hidden aspect-square group"
+              >
+                <img
+                  src={
+                    showHeatmap && point.explanation_img
+                      ? `data:image/jpeg;base64,${point.explanation_img}`
+                      : point.original_img
+                        ? `data:image/jpeg;base64,${point.original_img}`
+                        : point.mapbox_url
+                          ? point.mapbox_url
+                          : `https://maps.googleapis.com/maps/api/staticmap?center=${point.lat},${point.lng}&zoom=17&size=300x300&maptype=satellite&key=${GOOGLE_API_KEY}`
+                  }
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 
-              <div className="absolute top-2 left-2 px-2 py-1 bg-white/95 backdrop-blur rounded-lg text-[8px] font-black text-emerald-900">
-                {point.label}
-              </div>
+                <div className="absolute top-2 left-2 px-2 py-1 bg-white/95 backdrop-blur rounded-lg text-[8px] font-black text-emerald-900">
+                  {point.label}
+                </div>
 
-              <div className="absolute bottom-2 left-2 right-2">
-                <span className={`text-[8px] font-black uppercase ${
-                  point.individual_prob > 0.4 ? "text-orange-300" : "text-emerald-300"
-                }`}>
-                  {(point.individual_prob * 100).toFixed(0)}%
-                </span>
+                <div className="absolute bottom-2 left-2 right-2">
+                  <span className={`text-[8px] font-black uppercase ${point.individual_prob > 0.4 ? "text-orange-300" : "text-emerald-300"
+                    }`}>
+                    {(point.individual_prob * 100).toFixed(0)}%
+                  </span>
 
-                <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden mt-1">
-                  <div
-                    className={`h-full transition-all duration-1000 ${
-                      point.individual_prob > 0.4 ? "bg-orange-400" : "bg-emerald-400"
-                    }`}
-                    style={{ width: `${point.individual_prob * 100}%` }}
-                  />
+                  <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden mt-1">
+                    <div
+                      className={`h-full transition-all duration-1000 ${point.individual_prob > 0.4 ? "bg-orange-400" : "bg-emerald-400"
+                        }`}
+                      style={{ width: `${point.individual_prob * 100}%` }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         </div>
 
         {/* RIGHT — Verdict */}
         <div className="lg:w-2/5 p-6 sm:p-8 lg:p-12 flex flex-col justify-center bg-white">
-        <div className="mb-6 sm:mb-8">
-          <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
-            AI Verdict
-          </span>
+          <div className="mb-6 sm:mb-8">
+            <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
+              AI Verdict
+            </span>
 
-          <h2
-            className={`mt-4 font-bold tracking-tight leading-none
+            <h2
+              className={`mt-4 font-bold tracking-tight leading-none
               text-3xl sm:text-4xl lg:text-5xl
               ${analysisResult.result === "High Risk" || analysisResult.result === "Critical Risk"
-                ? "text-red-600"
-                : "text-emerald-600"}
+                  ? "text-red-600"
+                  : "text-emerald-600"}
             `}
-          >
-            {analysisResult.result}
-          </h2>
+            >
+              {analysisResult.result}
+            </h2>
 
-          <div className="mt-6 flex items-end gap-3">
-            <span className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 tabular-nums">
-              {(analysisResult.total_probability * 100).toFixed(1)}%
-            </span>
-            <span className="text-[10px] font-bold text-slate-400 uppercase leading-tight">
-              Estimated<br />Risk
-            </span>
+            <div className="mt-6 flex items-end gap-3">
+              <span className="text-4xl sm:text-5xl lg:text-6xl font-medium text-slate-900 tabular-nums">
+                {(analysisResult.total_probability * 100).toFixed(1)}%
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase leading-tight">
+                Estimated<br />Risk
+              </span>
+            </div>
           </div>
-        </div>
 
-         <FeedbackSection
+          <FeedbackSection
             feedback={feedback}
             setFeedback={setFeedback}
             notes={notes}
             setNotes={setNotes}
           />
 
-        <div className="space-y-3 mt-6">
-          <button
-            onClick={() => setShowHeatmap(!showHeatmap)}
-            className={`w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] transition-all active:scale-95 border ${
-              showHeatmap 
-                ? "bg-orange-500 text-white border-orange-400 hover:bg-orange-600" 
-                : "bg-white text-emerald-600 border-emerald-100 hover:bg-emerald-50"
-            }`}
-          >
-            {showHeatmap ? "View Satellite" : "View Heatmap (XAI)"}
-          </button>
+          <div className="space-y-3 mt-6">
+            <button
+              onClick={() => setShowHeatmap(!showHeatmap)}
+              className={`w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] transition-all active:scale-95 border ${showHeatmap
+                  ? "bg-orange-500 text-white border-orange-400 hover:bg-orange-600"
+                  : "bg-white text-emerald-600 border-emerald-100 hover:bg-emerald-50"
+                }`}
+            >
+              {showHeatmap ? "View Satellite" : "View Heatmap (XAI)"}
+            </button>
 
-          <button
-            onClick={() => handleSaveFeedback(analysisResult._id)}
-            className="w-full py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-emerald-700 transition-all active:scale-95"
-          >
-            Confirm & Save History
-          </button>
+            <button
+              onClick={() => handleSaveFeedback(analysisResult._id)}
+              className="w-full py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-emerald-700 transition-all active:scale-95"
+            >
+              Confirm & Save History
+            </button>
 
-          <button
-            onClick={() => navigate(-1)}
-            className="w-full py-4 bg-slate-50 text-slate-400 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-slate-100 transition-all active:scale-95"
-          >
-            Discard Scan
-          </button>
+            <button
+              onClick={() => navigate(-1)}
+              className="w-full py-4 bg-slate-50 text-slate-400 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-slate-100 transition-all active:scale-95"
+            >
+              Discard Scan
+            </button>
+          </div>
+
+          <div className="mt-6 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+            <p className="text-[9px] text-emerald-800 italic leading-relaxed">
+              "This report combines spatial data from surrounding areas. The weighted algorithm
+              prioritizes central terrain while monitoring perimeter threats."
+            </p>
+          </div>
         </div>
 
-        <div className="mt-6 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
-          <p className="text-[9px] text-emerald-800 italic leading-relaxed">
-            "This report combines spatial data from surrounding areas. The weighted algorithm
-            prioritizes central terrain while monitoring perimeter threats."
-          </p>
-        </div>
       </div>
-
     </div>
-  </div>
   );
 }
