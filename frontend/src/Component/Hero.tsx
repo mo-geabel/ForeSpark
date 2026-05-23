@@ -37,7 +37,7 @@ export default function Hero({}: HeroProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            TÜRKIYE REGION 
+            CANADA REGION 
           </div>
         <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9] mb-8 text-slate-900">
           AI <span className='text-emerald-600'>Wild</span><span className='text-orange-500'>Fire</span> <br /> 
