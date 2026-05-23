@@ -5,6 +5,7 @@ import emailjs from '@emailjs/browser';
 export default function Contact() {
   const form = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [email, setEmail] = useState('');
 
   const sendEmail = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ export default function Contact() {
     )
     .then(() => {
         setStatus('success');
+        setEmail('');
         form.current?.reset();
     }, (error) => {
         console.log(error.text);
@@ -46,7 +48,19 @@ export default function Contact() {
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Email Address</label>
-                <input name="reply_to" required type="email" placeholder="dalton@example.com" className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"/>
+                <input 
+                  name="reply_to" 
+                  required 
+                  type="email" 
+                  placeholder="dalton@example.com" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"
+                />
+                <input type="hidden" name="from_email" value={email} />
+                <input type="hidden" name="email" value={email} />
+                <input type="hidden" name="user_email" value={email} />
+                <input type="hidden" name="sender_email" value={email} />
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Message</label>
