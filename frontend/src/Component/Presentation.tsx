@@ -280,7 +280,7 @@ export default function Presentation() {
               >
                 <ArrowLeft size={12} className="md:w-[14px] md:h-[14px]" />
               </button>
-              <div className="flex items-center gap-2 pr-2 sm:pr-3 border-r border-slate-200/60 hidden md:flex">
+              <div className="flex items-center gap-2 pr-2 sm:pr-3 border-r border-slate-200/60 hidden min-[900px]:flex">
                 <div className="w-7 h-7 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full shadow-sm text-white shrink-0">
                   <MonitorPlay size={12} />
                 </div>
@@ -310,7 +310,7 @@ export default function Presentation() {
                     {sec.num}
                   </span>
                   <span className="hidden 2xl:inline">{sec.title}</span>
-                  <span className="hidden md:inline 2xl:hidden">{sec.shortTitle}</span>
+                  <span className="hidden min-[800px]:inline 2xl:hidden">{sec.shortTitle}</span>
                 </button>
               ))}
 
@@ -321,8 +321,8 @@ export default function Presentation() {
                 title={isTr ? "Analiz Aracını Aç" : "Open Analysis Tool"}
               >
                 <Zap size={12} className="animate-pulse shrink-0 md:w-[14px] md:h-[14px]" />
-                <span className="hidden md:inline">{isTr ? 'ANALİZE BAŞLA' : 'START ANALYSIS'}</span>
-                <span className="md:hidden">{isTr ? 'ANALİZ' : 'APP'}</span>
+                <span className="hidden min-[900px]:inline">{isTr ? 'ANALİZE BAŞLA' : 'START ANALYSIS'}</span>
+                <span className="min-[900px]:hidden">{isTr ? 'ANALİZ' : 'APP'}</span>
               </button>
               {/* Language Toggle Button */}
               <button
