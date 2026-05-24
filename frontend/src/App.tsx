@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './Context/AuthContext';
 import History from './Component/History';
 import Documentation from './Component/Documentation';
 import AnalysisPage from './Component/AnalysisPage';
+import Presentation from './Component/Presentation';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -23,6 +24,9 @@ function App() {
           
           {/* Documentation Page */}
           <Route path="/documentation" element={<Documentation />} />
+          
+          {/* Presentation Page */}
+          <Route path="/presentation" element={<Presentation />} />
           
           {/* Auth Page */}
           <Route path="/auth" element={<AuthModal isOpen={true} onClose={() => {}} initialMode="login" />} />

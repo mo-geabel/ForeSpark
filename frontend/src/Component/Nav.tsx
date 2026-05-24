@@ -39,6 +39,7 @@ export default function Navbar() {
           <ScrollLink to="hero" spy={true} smooth={true} offset={-80} duration={500} className="hover:text-emerald-600 cursor-pointer transition-colors">Home</ScrollLink>
           <ScrollLink to="about" spy={true} smooth={true} offset={-80} duration={500} className="hover:text-emerald-600 cursor-pointer transition-colors">About</ScrollLink>
           <ScrollLink to="contact" spy={true} smooth={true} offset={-80} duration={500} className="hover:text-emerald-600 cursor-pointer transition-colors">Contact</ScrollLink>
+          <Link to="/presentation" className="hover:text-emerald-600 cursor-pointer transition-colors">Presentation</Link>
           {isAuthenticated && (
             <Link to="/history" className="hover:text-emerald-600 cursor-pointer transition-colors">
               {user?.role === 'admin' ? 'Scan Users History' : 'My History'}
