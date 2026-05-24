@@ -114,6 +114,7 @@ interface Section {
   num: number;
   title: string;
   subtitle: string;
+  shortTitle: string;
 }
 
 export default function Presentation() {
@@ -211,12 +212,12 @@ export default function Presentation() {
   const currentInspectorStage = hoveredStage !== null ? hoveredStage : (activeStage !== null ? activeStage : 0);
 
   const sections: Section[] = [
-    { id: 'section-1', num: 1, title: isTr ? 'Literatür Taraması' : 'Literature Review', subtitle: isTr ? 'Tespit vs. Tahmin ve Model Seçimi' : 'Detection vs. Prediction & Model Selection' },
-    { id: 'section-2', num: 2, title: isTr ? 'Veri ve Uzamsal Kalıplar' : 'Data & Spatial Patterns', subtitle: isTr ? 'Uydu Veri Kümeleri ve Izgara Formatları' : 'Satellite Datasets & Grid Formats' },
-    { id: 'section-3', num: 3, title: isTr ? 'Sistem Tasarımı ve Akış' : 'System Design & Flow', subtitle: isTr ? '3-Hizmet Mikro Hizmetler ve Güvenlik' : '3-Service Microservices & Security' },
-    { id: 'section-4', num: 4, title: isTr ? 'Mimari Boru Hattı' : 'Architecture Pipeline', subtitle: isTr ? 'Derin Öğrenme Katmanları ve Eğitim' : 'Deep Learning Layers & Training' },
-    { id: 'section-5', num: 5, title: isTr ? 'Sonuçlar' : 'Results', subtitle: isTr ? 'Model Çıkarımı ve Metrikleri' : 'Model Inference & Metrics' },
-    { id: 'section-6', num: 6, title: isTr ? 'Açıklanabilir Yapay Zeka' : 'Explainable Artificial Intelligence', subtitle: isTr ? 'Model Kararlarının Görselleştirilmesi' : 'Visualization of Model Decisions' }
+    { id: 'section-1', num: 1, title: isTr ? 'Literatür Taraması' : 'Literature Review', subtitle: isTr ? 'Tespit vs. Tahmin ve Model Seçimi' : 'Detection vs. Prediction & Model Selection', shortTitle: isTr ? 'Literatür' : 'Literature' },
+    { id: 'section-2', num: 2, title: isTr ? 'Veri ve Uzamsal Kalıplar' : 'Data & Spatial Patterns', subtitle: isTr ? 'Uydu Veri Kümeleri ve Izgara Formatları' : 'Satellite Datasets & Grid Formats', shortTitle: isTr ? 'Veri' : 'Data' },
+    { id: 'section-3', num: 3, title: isTr ? 'Sistem Tasarımı ve Akış' : 'System Design & Flow', subtitle: isTr ? '3-Hizmet Mikro Hizmetler ve Güvenlik' : '3-Service Microservices & Security', shortTitle: isTr ? 'Sistem' : 'System' },
+    { id: 'section-4', num: 4, title: isTr ? 'Mimari Boru Hattı' : 'Architecture Pipeline', subtitle: isTr ? 'Derin Öğrenme Katmanları ve Eğitim' : 'Deep Learning Layers & Training', shortTitle: isTr ? 'Mimari' : 'Architecture' },
+    { id: 'section-5', num: 5, title: isTr ? 'Sonuçlar' : 'Results', subtitle: isTr ? 'Model Çıkarımı ve Metrikleri' : 'Model Inference & Metrics', shortTitle: isTr ? 'Sonuçlar' : 'Results' },
+    { id: 'section-6', num: 6, title: isTr ? 'Açıklanabilir Yapay Zeka' : 'Explainable Artificial Intelligence', subtitle: isTr ? 'Model Kararlarının Görselleştirilmesi' : 'Visualization of Model Decisions', shortTitle: isTr ? 'XAI' : 'XAI' }
   ];
 
   // IntersectionObserver to auto-update active tab on scroll
@@ -267,20 +268,20 @@ export default function Presentation() {
         <div className="absolute bottom-[10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none" />
 
         {/* STICKY HEADER WITH NAVBAR */}
-        <div className="sticky top-4 z-50 px-4 w-full flex justify-center mb-6 self-start">
-          <header className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-full p-1.5 flex items-center gap-3 max-w-[95vw] overflow-x-auto scrollbar-hide">
+        <div className="sticky top-4 z-50 px-1 sm:px-2 md:px-4 w-full flex justify-center mb-4 md:mb-6 self-start">
+          <header className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-full p-1 md:p-1.5 flex items-center gap-1 sm:gap-1.5 md:gap-3 max-w-[98vw] lg:max-w-[95vw] overflow-x-auto scrollbar-hide">
 
             {/* Logo and Back Button */}
-            <div className="flex items-center gap-2 shrink-0 pl-1">
+            <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0 pl-0.5 md:pl-1">
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-emerald-600 transition-colors border border-slate-200 shadow-sm"
+                className="flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-emerald-600 transition-colors border border-slate-200 shadow-sm shrink-0"
                 title={isTr ? "Ana Sayfaya Dön" : "Back to home"}
               >
-                <ArrowLeft size={14} />
+                <ArrowLeft size={12} className="md:w-[14px] md:h-[14px]" />
               </button>
-              <div className="flex items-center gap-2 pr-3 border-r border-slate-200/60 hidden md:flex">
-                <div className="w-7 h-7 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full shadow-sm text-white">
+              <div className="flex items-center gap-2 pr-2 sm:pr-3 border-r border-slate-200/60 hidden md:flex">
+                <div className="w-7 h-7 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full shadow-sm text-white shrink-0">
                   <MonitorPlay size={12} />
                 </div>
                 <div className="flex flex-col">
@@ -291,39 +292,42 @@ export default function Presentation() {
             </div>
 
             {/* Sections Navigation */}
-            <nav className="flex items-center gap-1 shrink-0 pr-1">
+            <nav className="flex items-center gap-0.5 md:gap-1 shrink-0 pr-0.5 md:pr-1">
               {sections.map(sec => (
                 <button
                   key={sec.id}
                   onClick={() => scrollToSection(sec.id)}
-                  className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 shrink-0 ${activeSection === sec.id
+                  className={`whitespace-nowrap px-1.5 md:px-2.5 2xl:px-3 py-1 md:py-1.5 rounded-full text-[9px] 2xl:text-[10px] font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1 md:gap-1.5 shrink-0 ${activeSection === sec.id
                     ? 'bg-emerald-500 text-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/80'
                     }`}
+                  title={sec.title}
                 >
-                  <span className={`hidden sm:flex items-center justify-center w-3.5 h-3.5 rounded-full text-[8px] ${activeSection === sec.id
+                  <span className={`flex items-center justify-center w-4 h-4 md:w-3.5 md:h-3.5 rounded-full text-[9px] md:text-[8px] shrink-0 ${activeSection === sec.id
                     ? 'bg-white/20 text-white'
                     : 'bg-slate-200/70 text-slate-500'
                     }`}>
                     {sec.num}
                   </span>
-                  {sec.title}
+                  <span className="hidden 2xl:inline">{sec.title}</span>
+                  <span className="hidden md:inline 2xl:hidden">{sec.shortTitle}</span>
                 </button>
               ))}
 
               {/* Special Analysis Button */}
               <button
                 onClick={() => navigate('/app')}
-                className="ml-2 flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-[10px] font-black uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 shrink-0"
+                className="ml-0.5 md:ml-1 2xl:ml-2 flex items-center gap-1 md:gap-1.5 px-2 md:px-3 2xl:px-4 py-1 md:py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-[8px] md:text-[9px] 2xl:text-[10px] font-black uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 shrink-0"
                 title={isTr ? "Analiz Aracını Aç" : "Open Analysis Tool"}
               >
-                <Zap size={14} className="animate-pulse" />
-                {isTr ? 'ANALİZE BAŞLA' : 'START ANALYSIS'}
+                <Zap size={12} className="animate-pulse shrink-0 md:w-[14px] md:h-[14px]" />
+                <span className="hidden md:inline">{isTr ? 'ANALİZE BAŞLA' : 'START ANALYSIS'}</span>
+                <span className="md:hidden">{isTr ? 'ANALİZ' : 'APP'}</span>
               </button>
               {/* Language Toggle Button */}
               <button
                 onClick={() => setIsTr(!isTr)}
-                className={`ml-1 flex items-center justify-center w-8 h-8 rounded-full font-black text-[10px] transition-all duration-300 shadow-sm border bg-slate-100 text-slate-600`}
+                className={`ml-0.5 md:ml-1 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full font-black text-[8px] md:text-[10px] transition-all duration-300 shadow-sm border bg-slate-100 text-slate-600 shrink-0`}
                 title="Toggle Turkish/English"
               >
                 {isTr ? 'TR' : 'EN'}
@@ -677,13 +681,13 @@ export default function Presentation() {
                       </span>
                     </div>
 
-                    {/* 2×2 photo grid — vertical small photo cards with no extra borders */}
-                    <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                    {/* Responsive photo grid: 1 col on mobile, 2 cols on sm+ */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                       {/* wildfire_1 */}
-                      <div className="flex flex-col items-center text-center p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
+                      <div className="flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
                         {/* Top: The Photo (crisp, small, natural size) */}
-                        <div className="w-[300px] h-[300px] rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
+                        <div className="w-full max-w-[300px] aspect-square rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
                           <img
                             src={wildfire1}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -702,9 +706,9 @@ export default function Presentation() {
                       </div>
 
                       {/* wildfire_2 */}
-                      <div className="flex flex-col items-center text-center p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
+                      <div className="flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
                         {/* Top: The Photo */}
-                        <div className="w-[300px] h-[300px] rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
+                        <div className="w-full max-w-[300px] aspect-square rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
                           <img
                             src={wildfire2}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -723,9 +727,9 @@ export default function Presentation() {
                       </div>
 
                       {/* nowildfire_1 */}
-                      <div className="flex flex-col items-center text-center p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
+                      <div className="flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
                         {/* Top: The Photo */}
-                        <div className="w-[300px] h-[300px] rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
+                        <div className="w-full max-w-[300px] aspect-square rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
                           <img
                             src={nowildfire1}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -744,9 +748,9 @@ export default function Presentation() {
                       </div>
 
                       {/* nowildfire_2 */}
-                      <div className="flex flex-col items-center text-center p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
+                      <div className="flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-slate-50/30 hover:bg-slate-50/70 transition-all duration-300 group">
                         {/* Top: The Photo */}
-                        <div className="w-[300px] h-[300px] rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
+                        <div className="w-full max-w-[300px] aspect-square rounded-2xl overflow-hidden border border-slate-100 bg-white flex-shrink-0 relative shadow-sm mb-4">
                           <img
                             src={nowildfire2}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
