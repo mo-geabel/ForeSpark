@@ -1,4 +1,12 @@
 {
+  "name": "fireforests-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:python": "cd Pythonbackend && set PYTHONIOENCODING=utf-8&& py app.py",
+    "dev": "npx -y concurrently \"npm run dev:backend\" \"npm run dev:python\" \"npm run dev:frontend\" --names \"NODE,PYTHON,REACT\" -c \"bgBlue.bold,bgMagenta.bold,bgCyan.bold\""
+  },
   "dependencies": {
     "react-circular-progressbar": "^2.1.0"
   }
