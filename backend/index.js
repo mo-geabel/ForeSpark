@@ -25,9 +25,10 @@ const uri = process.env.MONGO_URI;
 if (!uri || !uri.includes("@")) {
   console.error("❌ ERROR: Your MONGO_URI is incomplete.");
 } else {
-  mongoose.connect(uri)
+  // serverSelectionTimeoutMS helps fail fast if Vercel's IP is blocked by MongoDB Atlas
+  mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 })
     .then(() => console.log("✅ MongoDB Forest Data Connected..."))
-    .catch((err) => console.error("❌ Connection failed:", err.message));
+    .catch((err) => console.error("❌ Connection failed. Check your MongoDB IP Whitelist:", err.message));
 }
 
 // Only start the server locally (Vercel will use the exported app)
