@@ -57,22 +57,22 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
       {/* --- UI CONTROLS --- */}
       <button 
         onClick={() => navigate('/')} 
-        className="absolute top-6 left-6 z-50 flex items-center gap-2.5 h-10 px-4 bg-white/80 backdrop-blur-md rounded-xl border border-emerald-100/50 shadow-sm hover:border-emerald-300 transition-all active:scale-95 group"
+        className="absolute top-4 left-4 md:top-6 md:left-6 z-50 flex items-center justify-center w-10 h-10 md:w-auto md:px-4 bg-white/80 backdrop-blur-md rounded-xl border border-emerald-100/50 shadow-sm hover:border-emerald-300 transition-all active:scale-95 group"
       >
-        <span className="text-emerald-600 font-bold group-hover:-translate-x-0.5 transition-transform">←</span>
-        <span className="font-black text-[9px] uppercase tracking-[0.15em] text-slate-500">Back</span>
+        <span className="text-emerald-600 font-bold md:group-hover:-translate-x-0.5 transition-transform">←</span>
+        <span className="hidden md:inline ml-2 font-black text-[9px] uppercase tracking-[0.15em] text-slate-500">Back</span>
       </button>
 
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
+      <div className="absolute top-4 left-16 right-4 md:top-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-md md:right-auto md:px-4 z-50">
         <Search onPlaceSelect={onLocationSelect} />
       </div>
 
-      <div className="absolute top-24 left-6 z-30 flex flex-col gap-2">
+      <div className="absolute top-20 left-4 md:top-24 md:left-6 z-30 flex flex-col gap-2">
         {['satellite', 'terrain', 'hybrid'].map((type) => (
           <button 
             key={type}
             onClick={() => setMapType(type)}
-            className={`px-4 py-2 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all border shadow-lg ${
+            className={`px-3 md:px-4 py-2 rounded-xl font-bold text-[9px] md:text-[10px] uppercase tracking-widest transition-all border shadow-lg ${
               mapType === type 
                 ? 'bg-emerald-600 text-white border-emerald-400' 
                 : 'bg-white/90 text-slate-600 border-slate-100 backdrop-blur-md hover:bg-emerald-50'

@@ -45,16 +45,16 @@ export default function Search({ onPlaceSelect }: SearchProps) {
   };
 
   return (
-    <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-30">
+    <div className="w-full">
       <div className="relative group">
         <input
           ref={inputRef}
           type="text"
           onKeyDown={handleKeyDown}
-          placeholder="Search place or paste coords (lat, lng)..."
-          className="w-full bg-white/90 backdrop-blur-md border border-slate-700 rounded-2xl px-6 py-4 text-slate-800 shadow-2xl outline-none focus:border-green-500 transition-all pr-12"
+          placeholder="Search place or paste coords..."
+          className="w-full bg-white/90 backdrop-blur-md border border-slate-200 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-slate-800 shadow-lg outline-none focus:border-emerald-500 transition-all pr-12"
         />
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-800 text-xs font-mono pointer-events-none">
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-mono pointer-events-none">
           ⏎
         </div>
       </div>

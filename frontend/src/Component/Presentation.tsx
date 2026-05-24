@@ -203,9 +203,9 @@ export default function Presentation() {
         <div className="absolute top-[30%] right-[-10%] w-[400px] h-[400px] rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none" />
 
-        {/* STICKY HEADER WITH NAVBAR */}
-        <div className="sticky top-4 z-50 px-1 sm:px-2 md:px-4 w-full flex justify-center mb-4 md:mb-6 self-start">
-          <header className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-full p-1 md:p-1.5 flex items-center gap-1 sm:gap-1.5 md:gap-3 max-w-[98vw] lg:max-w-[95vw] overflow-x-auto scrollbar-hide">
+        {/* FIXED HEADER WITH NAVBAR */}
+        <div className="fixed top-4 z-[100] px-1 sm:px-2 md:px-4 w-full flex justify-center pointer-events-none left-0">
+          <header className="pointer-events-auto bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-full p-1 md:p-1.5 flex items-center gap-1 sm:gap-1.5 md:gap-3 max-w-[98vw] lg:max-w-[95vw] overflow-x-auto scrollbar-hide">
 
             {/* Logo and Back Button */}
             <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0 pl-0.5 md:pl-1">
@@ -274,7 +274,7 @@ export default function Presentation() {
         </div>
 
         {/* TOP SUMMARY INTRO BANNER */}
-        <section className="max-w-6xl mx-auto px-6 pt-16 pb-8 w-full">
+        <section className="max-w-6xl mx-auto px-6 pt-28 pb-8 w-full">
           <div className="bg-white rounded-[2.5rem] border border-slate-200/80 p-8 md:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
             <div className="max-w-2xl z-10">

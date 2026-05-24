@@ -15,7 +15,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
   const [_, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
 
   if (!isOpen) return null;
 

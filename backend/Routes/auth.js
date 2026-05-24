@@ -168,7 +168,7 @@ router.post('/google', async (req, res) => {
         let user = await User.findOne({ email });
         if (!user) {
             user = new User({
-                fullName: name,
+                fullName: name || email.split('@')[0], // Fallback to email prefix if name is missing
                 email: email,
                 password: `google_${sub}`, // Secure placeholder
                 role: 'user'
@@ -181,7 +181,15 @@ router.post('/google', async (req, res) => {
         const token = jwt.sign(myPayload, process.env.JWT_SECRET, { expiresIn: '24h' });
 
         // 5. SEND THE RESPONSE (Crucial!)
-        return res.status(200).json({ token, user });
+        // Format the user response EXACTLY like normal login to avoid frontend state issues
+        const userResponse = {
+            id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role
+        };
+        
+        return res.status(200).json({ token, user: userResponse });
 
     } catch (error) {
         // This is where most "empty responses" happen

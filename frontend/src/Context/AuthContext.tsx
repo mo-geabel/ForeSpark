@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (token) {
         try {
           // Verify token with backend and get user details
-          const response = await fetch('http://localhost:5000/api/auth/user', {
+          const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
+          const response = await fetch(`${API_URL}/api/auth/user`, {
             headers: { 'x-auth-token': token }
           });
 

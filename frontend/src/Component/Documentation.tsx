@@ -39,16 +39,16 @@ export default function Documentation() {
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-black text-slate-900">Model Documentation</h1>
-            <p className="text-slate-600 text-sm mt-1">
+            <h1 className="text-2xl md:text-4xl font-black text-slate-900">Model Documentation</h1>
+            <p className="text-slate-600 text-xs md:text-sm mt-1">
               Technical description of the wildfire risk prediction model
             </p>
           </div>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors w-full md:w-auto"
           >
             <ArrowLeft size={20} /> Back
           </button>
