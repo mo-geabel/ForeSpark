@@ -24,13 +24,10 @@ import {
   Database,
   Monitor,
   Server,
-  Send,
   Eye,
   Lock,
   Chrome,
   Shield,
-  Menu,
-  X,
   ArrowRight,
   Target,
   TrendingUp,
@@ -51,7 +48,6 @@ import {
   Line,
   BarChart,
   Bar,
-  ReferenceLine,
   ResponsiveContainer,
   XAxis,
   YAxis,
@@ -147,69 +143,9 @@ export default function Presentation() {
     setIsPlayingXai(true);
   };
 
-  const [simulating, setSimulating] = useState(false);
-  const [activeStage, setActiveStage] = useState<number | null>(null);
-  const [hoveredStage, setHoveredStage] = useState<number | null>(null);
-  const [selectedSample, setSelectedSample] = useState<'wildfire' | 'nowildfire'>('wildfire');
   const [isTr, setIsTr] = useState(false);
 
-  const startSimulation = () => {
-    if (simulating) return;
-    setSimulating(true);
-    setActiveStage(0);
 
-    let stage = 0;
-    const interval = setInterval(() => {
-      stage++;
-      if (stage < 5) {
-        setActiveStage(stage);
-      } else {
-        clearInterval(interval);
-        setActiveStage(null);
-        setSimulating(false);
-      }
-    }, 900); // 0.9s per stage as requested
-  };
-
-  const stageDetails = [
-    {
-      name: isTr ? "Girdi RGB Görüntü Tensörü" : "Input RGB Image Tensor",
-      shape: "224 × 224 × 3",
-      math: "X ∈ ℝ^[Batch × 3 × 224 × 224]",
-      params: isTr ? ["Grup Boyutu: 32", "Kanallar: 3 (RGB)", "Normalizasyon: PyTorch ImageNet"] : ["Batch Size: 32", "Channels: 3 (RGB)", "Normalization: PyTorch ImageNet"],
-      desc: isTr ? "Ham uydu görüntüsü, PyTorch varsayılan MobileNetV2 girdi özelliklerine göre yeniden boyutlandırılmış ve normalize edilmiştir." : "Raw satellite tile image resized and normalized to PyTorch default MobileNetV2 input specifications."
-    },
-    {
-      name: isTr ? "Kök Evrişim Aşaması" : "Stem Convolutional Stage",
-      shape: "112 × 112 × 32",
-      math: "Y = ReLU6( BatchNorm( Conv2D(X) ) )",
-      params: isTr ? ["Çekirdek: 3×3", "Adım: 2", "Aktivasyon: ReLU6", "Çıkan Kanal: 32"] : ["Kernel: 3×3", "Stride: 2", "Activation: ReLU6", "Channels Out: 32"],
-      desc: isTr ? "İlk özellik çıkarma katmanı. Agresif uzamsal küçültme için adımlı derinlik yönlü evrişim aracılığıyla girdi kalıplarını filtreler." : "Initial feature extraction layer. Filters input patterns via strided depthwise convolution for aggressive spatial reduction."
-    },
-    {
-      name: isTr ? "Ters Çevrilmiş Artık ve Darboğaz Çekirdeği" : "Inverted Residual & Bottleneck Core",
-      shape: "7 × 7 × 1280",
-      math: "X_block = X_in + Proj( DWConv( Exp(X_in) ) )",
-      params: isTr ? ["Bloklar: 17", "Genişleme: 6x", "DW Çekirdeği: 3×3", "Kısayol: Artık Bağlantı"] : ["Blocks: 17", "Expansion: 6x", "DW Kernel: 3×3", "Shortcut: Residual Link"],
-      desc: isTr ? "Ana mimari blok. Uzamsal ilişkileri verimli bir şekilde izole etmek için düşük boyutlu darboğazlar ve derinlik yönlü ayrılabilir evrişimler kullanır." : "Main architectural block. Employs low-dimensional bottlenecks and depthwise separable convolutions to isolate spatial relations efficiently."
-    },
-    {
-      name: isTr ? "Global Ortalama Havuzlama (GAP)" : "Global Average Pooling (GAP)",
-      shape: "1 × 1 × 1280",
-      math: "v_c = (1 / (H × W)) × Σ x_{c,i,j}",
-      params: isTr ? ["Uzamsal Boyut: 7×7 → 1×1", "Çıkan Vektör: 1D (1280)", "Parametreler: 0 (GAP)"] : ["Spatial Size: 7×7 → 1×1", "Vector Out: 1D (1280)", "Parameters: 0 (GAP)"],
-      desc: isTr ? "2D uzamsal boyutları (7×7) 1D kanal bazlı bir tanımlayıcı vektöre dönüştürerek parametre sayısını ve kaydırma önyargısını en aza indirir." : "Collapses 2D spatial dimensions (7×7) into a 1D channel-wise descriptor vector, minimizing parameter count and translation bias."
-    },
-    {
-      name: isTr ? "Doğrusal Sınıflandırıcı Başlık (Softmax)" : "Linear Classifier Head (Softmax)",
-      shape: isTr ? "2 Yönlü Sınıf Logitleri" : "2-Way Class Logits",
-      math: "p_i = e^{z_i} / Σ e^{z_j}",
-      params: isTr ? ["Giren Özellikler: 1280", "Sınıflar: 2 (Yangın/Güvenli)", "Aktivasyon: Softmax"] : ["Features In: 1280", "Classes: 2 (Wildfire/Safe)", "Activation: Softmax"],
-      desc: isTr ? "Softmax matematiksel aktivasyonu yoluyla derin özellikleri nihai kategorik sınıf olasılıklarına dönüştüren tam bağlantılı projeksiyon katmanı." : "Fully connected projection layer converting deep features into final categorical class probabilities via the Softmax mathematical activation."
-    }
-  ];
-
-  const currentInspectorStage = hoveredStage !== null ? hoveredStage : (activeStage !== null ? activeStage : 0);
 
   const sections: Section[] = [
     { id: 'section-1', num: 1, title: isTr ? 'Literatür Taraması' : 'Literature Review', subtitle: isTr ? 'Tespit vs. Tahmin ve Model Seçimi' : 'Detection vs. Prediction & Model Selection', shortTitle: isTr ? 'Literatür' : 'Literature' },
@@ -259,7 +195,7 @@ export default function Presentation() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-emerald-100 selection:text-emerald-900 flex flex-col relative">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-emerald-100 selection:text-emerald-900 flex flex-col relative overflow-x-hidden">
       {/* MAIN CONTENT WRAPPER */}
       <div className="flex-1 flex flex-col min-h-screen relative w-full pb-24">
         {/* BACKGROUND GRAPHICS */}
