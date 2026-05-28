@@ -53,7 +53,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
+  Legend,
+  LabelList,
 } from 'recharts';
 
 import wildfire1 from '../images/wildfire_1.png';
@@ -73,37 +74,142 @@ const donutData = [
 ];
 
 const lossData = [
-  { epoch: 'E1', trainLoss: 0.54, valLoss: 0.52 },
-  { epoch: 'E2', trainLoss: 0.38, valLoss: 0.35 },
-  { epoch: 'E3', trainLoss: 0.27, valLoss: 0.24 },
-  { epoch: 'E4', trainLoss: 0.19, valLoss: 0.18 },
-  { epoch: 'E5', trainLoss: 0.14, valLoss: 0.15 },
-  { epoch: 'E6', trainLoss: 0.10, valLoss: 0.12 },
-  { epoch: 'E7', trainLoss: 0.08, valLoss: 0.09 },
-  { epoch: 'E8', trainLoss: 0.06, valLoss: 0.08 },
-  { epoch: 'E9', trainLoss: 0.05, valLoss: 0.07 },
-  { epoch: 'E10', trainLoss: 0.04, valLoss: 0.06 }
+  { epoch: '1', trainLoss: 0.092, valLoss: 0.059 },
+  { epoch: '2', trainLoss: 0.046, valLoss: 0.040 },
+  { epoch: '3', trainLoss: 0.030, valLoss: 0.026 },
+  { epoch: '4', trainLoss: 0.026, valLoss: 0.027 },
+  { epoch: '5', trainLoss: 0.023, valLoss: 0.028 },
+  { epoch: '6', trainLoss: 0.018, valLoss: 0.024 },
+  { epoch: '7', trainLoss: 0.015, valLoss: 0.021 },
+  { epoch: '8', trainLoss: 0.012, valLoss: 0.019 },
+  { epoch: '9', trainLoss: 0.011, valLoss: 0.020 },
+  { epoch: '10', trainLoss: 0.011, valLoss: 0.021 }
 ];
 
 const accuracyData = [
-  { epoch: 'E1', trainAcc: 86.5, valAcc: 88.2 },
-  { epoch: 'E2', trainAcc: 91.2, valAcc: 92.5 },
-  { epoch: 'E3', trainAcc: 94.1, valAcc: 94.8 },
-  { epoch: 'E4', trainAcc: 95.8, valAcc: 96.1 },
-  { epoch: 'E5', trainAcc: 96.9, valAcc: 97.2 },
-  { epoch: 'E6', trainAcc: 97.6, valAcc: 97.9 },
-  { epoch: 'E7', trainAcc: 98.1, valAcc: 98.3 },
-  { epoch: 'E8', trainAcc: 98.5, valAcc: 98.6 },
-  { epoch: 'E9', trainAcc: 98.8, valAcc: 98.9 },
-  { epoch: 'E10', trainAcc: 99.2, valAcc: 99.4 }
+  { epoch: '1', trainAcc: 96.5, valAcc: 97.9 },
+  { epoch: '2', trainAcc: 98.2, valAcc: 98.6 },
+  { epoch: '3', trainAcc: 98.8, valAcc: 99.1 },
+  { epoch: '4', trainAcc: 99.0, valAcc: 99.1 },
+  { epoch: '5', trainAcc: 99.1, valAcc: 99.1 },
+  { epoch: '6', trainAcc: 99.4, valAcc: 98.95 },
+  { epoch: '7', trainAcc: 99.45, valAcc: 99.3 },
+  { epoch: '8', trainAcc: 99.55, valAcc: 99.4 },
+  { epoch: '9', trainAcc: 99.65, valAcc: 99.35 },
+  { epoch: '10', trainAcc: 99.65, valAcc: 99.3 }
 ];
 
-const performanceData = [
-  { name: 'Accuracy', PyroVision: 94.80, ResNet101: 99.60, MobileNetV2: 99.49 },
-  { name: 'F1-Score', PyroVision: 94.8, ResNet101: 99.6, MobileNetV2: 99.54 },
-  { name: 'Recall', PyroVision: 94.80, ResNet101: 99.31, MobileNetV2: 99.17 },
-  { name: 'Precision', PyroVision: 94.8, ResNet101: 99.9, MobileNetV2: 99.91 },
+const pyroVisionData = [
+  { name: 'Accuracy', value: 0.9551, fill: '#56a2e3' },
+  { name: 'F1-Score', value: 0.9516, fill: '#50d487' },
+  { name: 'Recall', value: 0.9480, fill: '#e3675c' },
+  { name: 'Precision', value: 0.9553, fill: '#f3b244' }
 ];
+
+const resNetData = [
+  { name: 'Accuracy', value: 0.9960, fill: '#56a2e3' },
+  { name: 'F1-Score', value: 0.9964, fill: '#50d487' },
+  { name: 'Recall', value: 0.9931, fill: '#e3675c' },
+  { name: 'Precision', value: 0.9997, fill: '#f3b244' }
+];
+
+const mobileNetData = [
+  { name: 'Accuracy', value: 0.9949, fill: '#56a2e3' },
+  { name: 'F1-Score', value: 0.9954, fill: '#50d487' },
+  { name: 'Recall', value: 0.9917, fill: '#e3675c' },
+  { name: 'Precision', value: 0.9991, fill: '#f3b244' }
+];
+
+interface PlotBorderProps {
+  width?: number;
+  height?: number;
+  margin?: {
+    left?: number;
+    right?: number;
+    top?: number;
+    bottom?: number;
+  };
+}
+
+const PlotBorder = (props: PlotBorderProps) => {
+  const { width, height, margin } = props;
+  if (!width || !height || !margin) return null;
+  const x = margin.left || 0;
+  const y = margin.top || 0;
+  const w = width - (margin.left || 0) - (margin.right || 0);
+  const h = height - (margin.top || 0) - (margin.bottom || 0);
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={w}
+      height={h}
+      fill="none"
+      stroke="#000000"
+      strokeWidth={1}
+    />
+  );
+};
+const ModelPerformanceChart = ({ title, subTitle, data }: { title: string; subTitle: string; data: any[] }) => {
+  return (
+    <div className="flex flex-col items-center w-full bg-white p-2 rounded-xl">
+      {/* Title */}
+      <div className="text-center mb-3 font-sans font-bold text-xs sm:text-[13px] text-black leading-tight">
+        <div className="font-extrabold">{title}</div>
+        <div className="font-extrabold">{subTitle}</div>
+      </div>
+
+      {/* Chart container */}
+      <div className="w-full h-[280px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
+            barCategoryGap="18%"
+          >
+            <CartesianGrid vertical={false} stroke="#e5e7eb" strokeDasharray="3 3" />
+            <XAxis
+              dataKey="name"
+              stroke="#000000"
+              tickLine={{ stroke: '#000000' }}
+              tick={{ fill: '#000000', fontWeight: 'bold', fontSize: 10 }}
+            />
+            <YAxis
+              domain={[0.92, 1.00]}
+              ticks={[0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99, 1.00]}
+              tickFormatter={(v) => v.toFixed(2)}
+              stroke="#000000"
+              tickLine={{ stroke: '#000000' }}
+              tick={{ fill: '#000000', fontWeight: 'bold', fontSize: 10 }}
+              width={45}
+              label={{
+                value: 'Score',
+                angle: -90,
+                position: 'insideLeft',
+                style: { textAnchor: 'middle', fontWeight: 'bold', fill: '#000000', fontSize: 11 }
+              }}
+            />
+            <Bar dataKey="value">
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.fill} stroke="#000000" strokeWidth={1} />
+              ))}
+              <LabelList
+                dataKey="value"
+                position="insideTop"
+                formatter={(val: any) => (typeof val === 'number' ? val.toFixed(4) : val)}
+                style={{ fill: '#000000', fontWeight: 'bold', fontSize: 10, fontFamily: 'sans-serif' }}
+                dy={12}
+              />
+            </Bar>
+            <PlotBorder />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};
+
+
 
 interface Section {
   id: string;
@@ -721,14 +827,14 @@ export default function Presentation() {
                   </div>
 
                   <div className="h-[220px] w-full text-xs flex items-center justify-center">
-                    <LineChart width={440} height={220} data={lossData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                    <LineChart width={440} height={275} data={lossData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                       <XAxis dataKey="epoch" stroke="#94a3b8" />
-                      <YAxis domain={[0, 0.6]} stroke="#94a3b8" />
+                      <YAxis domain={[0, 0.1]} stroke="#94a3b8" />
                       <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
                       <Legend verticalAlign="top" height={36} iconType="circle" />
-                      <Line type="monotone" dataKey="trainLoss" name={isTr ? 'Eğitim Kaybı' : 'Training Loss'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                      <Line type="monotone" dataKey="valLoss" name={isTr ? 'Doğrulama Kaybı' : 'Validation Loss'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                      <Line type="linear" dataKey="trainLoss" name={isTr ? 'Eğitim Kaybı' : 'Training Loss'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                      <Line type="linear" dataKey="valLoss" name={isTr ? 'Doğrulama Kaybı' : 'Validation Loss'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                     </LineChart>
                   </div>
                 </div>
@@ -741,14 +847,14 @@ export default function Presentation() {
                   </div>
 
                   <div className="h-[220px] w-full text-xs flex items-center justify-center">
-                    <LineChart width={440} height={220} data={accuracyData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                    <LineChart width={440} height={275} data={accuracyData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                       <XAxis dataKey="epoch" stroke="#94a3b8" />
-                      <YAxis domain={[85, 100]} stroke="#94a3b8" />
+                      <YAxis domain={[95, 100]} stroke="#94a3b8" />
                       <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
                       <Legend verticalAlign="top" height={36} iconType="circle" />
-                      <Line type="monotone" dataKey="trainAcc" name={isTr ? 'Eğitim Doğruluğu' : 'Training Accuracy'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                      <Line type="monotone" dataKey="valAcc" name={isTr ? 'Doğrulama Doğruluğu' : 'Validation Accuracy'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                      <Line type="linear" dataKey="trainAcc" name={isTr ? 'Eğitim Doğruluğu' : 'Training Accuracy'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                      <Line type="linear" dataKey="valAcc" name={isTr ? 'Doğrulama Doğruluğu' : 'Validation Accuracy'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                     </LineChart>
                   </div>
                 </div>
@@ -1105,6 +1211,162 @@ export default function Presentation() {
                 </div>
 
               </div>
+              {/* Sub-section D: Spatial Weighting Visualizer */}
+              <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300 mb-8">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 text-[10px] font-black tracking-wider text-slate-600 uppercase mb-2">
+                      <MapPin size={12} />
+                      {isTr ? 'UZAMSAL AĞIRLIKLANDIRMA ALGORİTMASI' : 'SPATIAL WEIGHTING ALGORITHM'}
+                    </div>
+                    <p className="text-sm text-slate-500">{isTr ? 'Gürültü azaltma için etkileşimli 3×3 bağlam ızgarası.' : 'Interactive 3×3 context grid for noise reduction.'}</p>
+                  </div>
+
+                  <button
+                    onClick={() => setShowEdgeCase(!showEdgeCase)}
+                    className={`mt-4 sm:mt-0 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border ${showEdgeCase
+                      ? 'bg-sky-50 text-sky-600 border-sky-200 shadow-sm shadow-sky-100'
+                      : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-700'
+                      }`}
+                  >
+                    <Eye size={14} className={showEdgeCase ? 'text-sky-500' : 'text-slate-400'} />
+                    {showEdgeCase ? (isTr ? 'Uç Durumu Kapat' : 'Disable Edge Case') : (isTr ? 'Uç Durumu Göster: Sudaki Ada' : 'Show Edge Case: Island in Water')}
+                  </button>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-10 items-center justify-center">
+
+                  {/* The Grid */}
+                  <div className="relative">
+                    <div className="absolute -top-3 -right-3 bg-slate-800 text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-md z-20">
+                      Σ = 1.00
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 p-4 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner">
+
+                      {/* Top Row */}
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
+                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                        </div>
+                      </div>
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
+                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                        </div>
+                      </div>
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
+                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                        </div>
+                      </div>
+
+                      {/* Middle Row */}
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
+                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                        </div>
+                      </div>
+                      <div className={`w-24 h-24 sm:w-28 sm:h-28 -m-2 rounded-xl border-4 flex flex-col items-center justify-center z-10 transition-colors duration-500 relative overflow-hidden shadow-lg ${showEdgeCase ? 'border-orange-500' : 'border-orange-400 bg-orange-50'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#16a34a] opacity-90 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-lg border border-orange-200">
+                          <div className="text-[9px] font-black text-orange-600 uppercase">{isTr ? 'HEDEF PARÇA' : 'TARGET PATCH'}</div>
+                          <div className="text-base font-black text-slate-900">w=0.40</div>
+                        </div>
+                      </div>
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
+                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Row */}
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
+                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                        </div>
+                      </div>
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
+                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                        </div>
+                      </div>
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
+                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
+                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
+                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
+                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Context Info */}
+                  <div className="flex-1 max-w-sm">
+                    {showEdgeCase ? (
+                      <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 transition-all duration-500">
+                        <h4 className="text-sm font-black text-sky-900 mb-4 uppercase tracking-wider flex items-center gap-2">
+                          <TriangleAlert size={16} className="text-sky-600" />
+                          {isTr ? 'Uç Durum Aktif' : 'Edge Case Active'}
+                        </h4>
+
+                        <div className="space-y-4 mb-6">
+                          <div>
+                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">{isTr ? 'İzole Parça Skoru' : 'Isolated Patch Score'}</div>
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-100 text-red-700 text-xs font-black">
+                              0.98 {isTr ? 'ORMAN YANGINI' : 'WILDFIRE'} <span className="opacity-70 font-bold">{isTr ? '(Yanlış Pozitif)' : '(False Positive)'}</span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">{isTr ? 'Uzamsal Ağırlıklandırmadan Sonra' : 'After Spatial Weighting'}</div>
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-100 text-amber-700 text-xs font-black">
+                              0.45 {isTr ? 'ORMAN YANGINI' : 'WILDFIRE'} <span className="opacity-70 font-bold">{isTr ? '(Güvenli Eşik)' : '(Safe Threshold)'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="text-[11px] text-sky-700 font-medium leading-relaxed bg-white/60 p-3 rounded-xl border border-sky-200/50">
+                          {isTr ? '"Çevredeki su parçaları 0.10×4 + 0.05×4 = 0.60 Risksiz sinyal ağırlığına katkıda bulunarak yanlış pozitifi etkili bir şekilde bastırır."' : '"Surrounding water patches contribute 0.10×4 + 0.05×4 = 0.60 weight of No-Risk signal, effectively muting the false positive."'}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 transition-all duration-500">
+                        <h4 className="text-sm font-black text-emerald-900 mb-2 uppercase tracking-wider">
+                          {isTr ? 'Bağlam Güçlendirme' : 'Context Amplification'}
+                        </h4>
+                        <p className="text-xs text-emerald-700 mb-6 leading-relaxed font-medium">
+                          {isTr ? 'Orman yangınları uzamsal olaylardır. 3×3 bir ızgaranın ağırlıklı ortalamasını alarak, büyük bitişik ısı izlerini güçlendirirken yanlış pozitifleri (izole kamp ateşleri veya yüksek oranda yansıtıcı çatılar gibi) büyük ölçüde azaltıyoruz.' : 'Wildfires are spatial events. By taking a weighted average of a 3×3 grid, we drastically reduce false positives (like isolated campfires or highly reflective rooftops) while amplifying massive contiguous heat signatures.'}
+                        </p>
+
+                        <div className="inline-flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-emerald-200 shadow-sm w-full">
+                          <div className="p-1.5 bg-emerald-100 rounded-md text-emerald-600">
+                            <Maximize size={14} />
+                          </div>
+                          <div>
+                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{isTr ? 'Kapsama Genişletme' : 'Coverage Expansion'}</div>
+                            <div className="text-[10px] font-black text-slate-800">{isTr ? 'Tek parça: ~644m → 3×3 ızgara: ~1.9km kapsama' : 'Single patch: ~644m → 3×3 grid: ~1.9km coverage'}</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
               {/* Sub-section C: Architecture Stats Row */}
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -1153,22 +1415,24 @@ export default function Presentation() {
                   {isTr ? 'TEST SETİ PERFORMANSI — TÜM 3 MODEL' : 'TEST SET PERFORMANCE — ALL 3 MODELS'}
                 </div>
 
-                <div className="w-full h-[350px] text-xs">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={performanceData}
-                      margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                      <XAxis dataKey="name" stroke="#94a3b8" tick={{ fill: '#64748b', fontWeight: 700 }} />
-                      <YAxis domain={[90, 100]} stroke="#94a3b8" tick={{ fill: '#64748b', fontWeight: 600 }} />
-                      <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} cursor={{ fill: '#f8fafc' }} />
-                      <Legend wrapperStyle={{ paddingTop: '20px' }} iconType="circle" />
-                      <Bar dataKey="PyroVision" fill="#94a3b8" radius={[4, 4, 0, 0]} barSize={32} />
-                      <Bar dataKey="ResNet101" name="Modified ResNet101" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={32} />
-                      <Bar dataKey="MobileNetV2" fill="#10b981" radius={[4, 4, 0, 0]} barSize={32} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="w-full mt-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <ModelPerformanceChart
+                      title={isTr ? "Test Seti Performans Metrikleri" : "Test Set Performance Metrics"}
+                      subTitle="(PyroVision)"
+                      data={pyroVisionData}
+                    />
+                    <ModelPerformanceChart
+                      title={isTr ? "Test Seti Performans Metrikleri" : "Test Set Performance Metrics"}
+                      subTitle="(Modified ResNet101)"
+                      data={resNetData}
+                    />
+                    <ModelPerformanceChart
+                      title={isTr ? "Test Seti Performans Metrikleri" : "Test Set Performance Metrics"}
+                      subTitle={isTr ? "(MobileNetV2 (bizim))" : "(MobileNetV2 (ours))"}
+                      data={mobileNetData}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -1338,162 +1602,6 @@ export default function Presentation() {
                 </div>
               </div>
 
-              {/* Sub-section D: Spatial Weighting Visualizer */}
-              <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300 mb-8">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
-                  <div>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 text-[10px] font-black tracking-wider text-slate-600 uppercase mb-2">
-                      <MapPin size={12} />
-                      {isTr ? 'UZAMSAL AĞIRLIKLANDIRMA ALGORİTMASI' : 'SPATIAL WEIGHTING ALGORITHM'}
-                    </div>
-                    <p className="text-sm text-slate-500">{isTr ? 'Gürültü azaltma için etkileşimli 3×3 bağlam ızgarası.' : 'Interactive 3×3 context grid for noise reduction.'}</p>
-                  </div>
-
-                  <button
-                    onClick={() => setShowEdgeCase(!showEdgeCase)}
-                    className={`mt-4 sm:mt-0 px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border ${showEdgeCase
-                      ? 'bg-sky-50 text-sky-600 border-sky-200 shadow-sm shadow-sky-100'
-                      : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-700'
-                      }`}
-                  >
-                    <Eye size={14} className={showEdgeCase ? 'text-sky-500' : 'text-slate-400'} />
-                    {showEdgeCase ? (isTr ? 'Uç Durumu Kapat' : 'Disable Edge Case') : (isTr ? 'Uç Durumu Göster: Sudaki Ada' : 'Show Edge Case: Island in Water')}
-                  </button>
-                </div>
-
-                <div className="flex flex-col md:flex-row gap-10 items-center justify-center">
-
-                  {/* The Grid */}
-                  <div className="relative">
-                    <div className="absolute -top-3 -right-3 bg-slate-800 text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-md z-20">
-                      Σ = 1.00
-                    </div>
-                    <div className="grid grid-cols-3 gap-3 p-4 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner">
-
-                      {/* Top Row */}
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
-                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
-                        </div>
-                      </div>
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
-                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
-                        </div>
-                      </div>
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
-                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
-                        </div>
-                      </div>
-
-                      {/* Middle Row */}
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
-                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
-                        </div>
-                      </div>
-                      <div className={`w-24 h-24 sm:w-28 sm:h-28 -m-2 rounded-xl border-4 flex flex-col items-center justify-center z-10 transition-colors duration-500 relative overflow-hidden shadow-lg ${showEdgeCase ? 'border-orange-500' : 'border-orange-400 bg-orange-50'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#16a34a] opacity-90 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-lg border border-orange-200">
-                          <div className="text-[9px] font-black text-orange-600 uppercase">{isTr ? 'HEDEF PARÇA' : 'TARGET PATCH'}</div>
-                          <div className="text-base font-black text-slate-900">w=0.40</div>
-                        </div>
-                      </div>
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
-                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
-                        </div>
-                      </div>
-
-                      {/* Bottom Row */}
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
-                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
-                        </div>
-                      </div>
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
-                          <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
-                        </div>
-                      </div>
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
-                        {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
-                        <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
-                          <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* Context Info */}
-                  <div className="flex-1 max-w-sm">
-                    {showEdgeCase ? (
-                      <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 transition-all duration-500">
-                        <h4 className="text-sm font-black text-sky-900 mb-4 uppercase tracking-wider flex items-center gap-2">
-                          <TriangleAlert size={16} className="text-sky-600" />
-                          {isTr ? 'Uç Durum Aktif' : 'Edge Case Active'}
-                        </h4>
-
-                        <div className="space-y-4 mb-6">
-                          <div>
-                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">{isTr ? 'İzole Parça Skoru' : 'Isolated Patch Score'}</div>
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-100 text-red-700 text-xs font-black">
-                              0.98 {isTr ? 'ORMAN YANGINI' : 'WILDFIRE'} <span className="opacity-70 font-bold">{isTr ? '(Yanlış Pozitif)' : '(False Positive)'}</span>
-                            </div>
-                          </div>
-
-                          <div>
-                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">{isTr ? 'Uzamsal Ağırlıklandırmadan Sonra' : 'After Spatial Weighting'}</div>
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-100 text-amber-700 text-xs font-black">
-                              0.45 {isTr ? 'ORMAN YANGINI' : 'WILDFIRE'} <span className="opacity-70 font-bold">{isTr ? '(Güvenli Eşik)' : '(Safe Threshold)'}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <p className="text-[11px] text-sky-700 font-medium leading-relaxed bg-white/60 p-3 rounded-xl border border-sky-200/50">
-                          {isTr ? '"Çevredeki su parçaları 0.10×4 + 0.05×4 = 0.60 Risksiz sinyal ağırlığına katkıda bulunarak yanlış pozitifi etkili bir şekilde bastırır."' : '"Surrounding water patches contribute 0.10×4 + 0.05×4 = 0.60 weight of No-Risk signal, effectively muting the false positive."'}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 transition-all duration-500">
-                        <h4 className="text-sm font-black text-emerald-900 mb-2 uppercase tracking-wider">
-                          {isTr ? 'Bağlam Güçlendirme' : 'Context Amplification'}
-                        </h4>
-                        <p className="text-xs text-emerald-700 mb-6 leading-relaxed font-medium">
-                          {isTr ? 'Orman yangınları uzamsal olaylardır. 3×3 bir ızgaranın ağırlıklı ortalamasını alarak, büyük bitişik ısı izlerini güçlendirirken yanlış pozitifleri (izole kamp ateşleri veya yüksek oranda yansıtıcı çatılar gibi) büyük ölçüde azaltıyoruz.' : 'Wildfires are spatial events. By taking a weighted average of a 3×3 grid, we drastically reduce false positives (like isolated campfires or highly reflective rooftops) while amplifying massive contiguous heat signatures.'}
-                        </p>
-
-                        <div className="inline-flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-emerald-200 shadow-sm w-full">
-                          <div className="p-1.5 bg-emerald-100 rounded-md text-emerald-600">
-                            <Maximize size={14} />
-                          </div>
-                          <div>
-                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{isTr ? 'Kapsama Genişletme' : 'Coverage Expansion'}</div>
-                            <div className="text-[10px] font-black text-slate-800">{isTr ? 'Tek parça: ~644m → 3×3 ızgara: ~1.9km kapsama' : 'Single patch: ~644m → 3×3 grid: ~1.9km coverage'}</div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
 
             </div>
 

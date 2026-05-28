@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { useNavigate } from 'react-router-dom';
 import { MapPinIcon } from '@heroicons/react/24/outline';
-import Search from './Search'; 
+import Search from './Search';
 
 function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handleAnalyze }: any) {
   // This must be OUTSIDE MapSelector to keep focus stable
@@ -55,8 +55,8 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
   return (
     <>
       {/* --- UI CONTROLS --- */}
-      <button 
-        onClick={() => navigate('/')} 
+      <button
+        onClick={() => navigate('/')}
         className="absolute top-4 left-4 md:top-6 md:left-6 z-50 flex items-center justify-center w-10 h-10 md:w-auto md:px-4 bg-white/80 backdrop-blur-md rounded-xl border border-emerald-100/50 shadow-sm hover:border-emerald-300 transition-all active:scale-95 group"
       >
         <span className="text-emerald-600 font-bold md:group-hover:-translate-x-0.5 transition-transform">←</span>
@@ -69,14 +69,13 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
 
       <div className="absolute top-20 left-4 md:top-24 md:left-6 z-30 flex flex-col gap-2">
         {['satellite', 'terrain', 'hybrid'].map((type) => (
-          <button 
+          <button
             key={type}
             onClick={() => setMapType(type)}
-            className={`px-3 md:px-4 py-2 rounded-xl font-bold text-[9px] md:text-[10px] uppercase tracking-widest transition-all border shadow-lg ${
-              mapType === type 
-                ? 'bg-emerald-600 text-white border-emerald-400' 
+            className={`px-3 md:px-4 py-2 rounded-xl font-bold text-[9px] md:text-[10px] uppercase tracking-widest transition-all border shadow-lg ${mapType === type
+                ? 'bg-emerald-600 text-white border-emerald-400'
                 : 'bg-white/90 text-slate-600 border-slate-100 backdrop-blur-md hover:bg-emerald-50'
-            }`}
+              }`}
           >
             {type}
           </button>
@@ -86,7 +85,7 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
       {/* --- GOOGLE MAP --- */}
       <Map
         style={{ width: '100%', height: '100%' }}
-        defaultCenter={savedViewport ? { lat: savedViewport.lat, lng: savedViewport.lng } : { lat: 55, lng: -110 }}
+        defaultCenter={savedViewport ? { lat: savedViewport.lat, lng: savedViewport.lng } : { lat: 62, lng: -73 }}
         defaultZoom={savedViewport ? savedViewport.zoom : 6}
         mapTypeId={mapType}
         gestureHandling={'greedy'}
@@ -103,8 +102,8 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
                   {placeName || "Identifying terrain..."}
                 </p>
                 <div className="text-[9px] font-mono bg-slate-50 p-2 rounded border border-slate-100 flex flex-col gap-0.5">
-                   <span>LAT: {markerPos.lat.toFixed(5)}</span>
-                   <span>LNG: {markerPos.lng.toFixed(5)}</span>
+                  <span>LAT: {markerPos.lat.toFixed(5)}</span>
+                  <span>LNG: {markerPos.lng.toFixed(5)}</span>
                 </div>
               </div>
             </InfoWindow>
@@ -114,14 +113,14 @@ function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handl
 
       {/* --- ACTION BUTTONS --- */}
       <div className="absolute bottom-32 right-6 z-50 flex flex-col gap-2">
-        <button onClick={handleFindMe} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl text-lg"><MapPinIcon className="h-6 w-6"/></button>
+        <button onClick={handleFindMe} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl text-lg"><MapPinIcon className="h-6 w-6" /></button>
         <button onClick={() => map?.setZoom((map.getZoom() || 10) + 1)} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl font-bold">+</button>
         <button onClick={() => map?.setZoom((map.getZoom() || 10) - 1)} className="h-10 w-10 flex items-center justify-center bg-white/90 rounded-xl border border-slate-100 shadow-xl font-bold">−</button>
       </div>
 
       {markerPos && (
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 w-full max-w-xs px-4">
-          <button 
+          <button
             onClick={handleAnalyze}
             disabled={isAnalyzing}
             className={`w-full py-5 rounded-2xl font-medium text-[12px] uppercase tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-3
@@ -184,13 +183,13 @@ export default function MapSelector() {
       const data = await response.json();
       if (response.ok) {
         console.log(data);
-       navigate(`/analysis/${data._id}`, {
-        state: {
-          analysisResult: data,
-          feedback,
-          userNotes: userNotesRef.current
-        }
-      });
+        navigate(`/analysis/${data._id}`, {
+          state: {
+            analysisResult: data,
+            feedback,
+            userNotes: userNotesRef.current
+          }
+        });
 
       }
     } catch (err) {
@@ -204,7 +203,7 @@ export default function MapSelector() {
   return (
     <div className="h-screen w-screen relative bg-slate-100">
       <APIProvider apiKey={GOOGLE_API_KEY}>
-        <MapContent 
+        <MapContent
           onLocationSelect={handleLocationUpdate}
           markerPos={markerPos}
           placeName={placeName}
