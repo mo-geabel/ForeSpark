@@ -719,7 +719,7 @@ export default function Presentation() {
                         {isTr ? 'UYDU ÖRNEKLERİ' : 'SATELLITE SAMPLES'}
                       </div>
                       <span className="text-[10px] text-slate-400 font-bold bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-                        {isTr ? '2×2 Matris · 300×300px' : '2×2 Matrix · 300×300px'}
+                        {isTr ? '350×350px (~644×644m)' : '350×350px (~644×644m)'}
                       </span>
                     </div>
 
@@ -816,50 +816,7 @@ export default function Presentation() {
 
               </div>
 
-              {/* Row 2: Charts placed under Row 1 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 
-                {/* Chart A — Training Loss */}
-                <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 text-[10px] font-black tracking-wider text-slate-600 uppercase mb-6">
-                    <Activity size={12} />
-                    {isTr ? 'KAYIP DİNAMİKLERİ (EPOK 1-10)' : 'LOSS DYNAMICS (EPOCH 1-10)'}
-                  </div>
-
-                  <div className="h-[220px] w-full text-xs flex items-center justify-center">
-                    <LineChart width={440} height={275} data={lossData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis dataKey="epoch" stroke="#94a3b8" />
-                      <YAxis domain={[0, 0.1]} stroke="#94a3b8" />
-                      <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
-                      <Legend verticalAlign="top" height={36} iconType="circle" />
-                      <Line type="linear" dataKey="trainLoss" name={isTr ? 'Eğitim Kaybı' : 'Training Loss'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                      <Line type="linear" dataKey="valLoss" name={isTr ? 'Doğrulama Kaybı' : 'Validation Loss'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                    </LineChart>
-                  </div>
-                </div>
-
-                {/* Chart B — Training Accuracy */}
-                <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 text-[10px] font-black tracking-wider text-slate-600 uppercase mb-6">
-                    <Activity size={12} />
-                    {isTr ? 'DOĞRULUK DİNAMİKLERİ (EPOK 1-10)' : 'ACCURACY DYNAMICS (EPOCH 1-10)'}
-                  </div>
-
-                  <div className="h-[220px] w-full text-xs flex items-center justify-center">
-                    <LineChart width={440} height={275} data={accuracyData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis dataKey="epoch" stroke="#94a3b8" />
-                      <YAxis domain={[95, 100]} stroke="#94a3b8" />
-                      <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
-                      <Legend verticalAlign="top" height={36} iconType="circle" />
-                      <Line type="linear" dataKey="trainAcc" name={isTr ? 'Eğitim Doğruluğu' : 'Training Accuracy'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                      <Line type="linear" dataKey="valAcc" name={isTr ? 'Doğrulama Doğruluğu' : 'Validation Accuracy'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                    </LineChart>
-                  </div>
-                </div>
-
-              </div>
 
               {/* Row 3: Dataset parameters placed at the very bottom */}
               <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300">
@@ -882,7 +839,7 @@ export default function Presentation() {
                     <Layers size={20} className="text-emerald-600" />
                     <div>
                       <div className="text-[10px] font-black text-slate-700 uppercase">{isTr ? 'Uydu Özellikleri' : 'Satellite Specs'}</div>
-                      <p className="text-[10px] text-slate-500 mt-0.5 font-semibold leading-tight">{isTr ? 'Yakınlaştırma svy 15 · 300px · ~644m kapsama' : 'Zoom lvl 15 · 300px · ~644m coverage'}</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5 font-semibold leading-tight">{isTr ? 'Yakınlaştırma svy 15 · 350px · ~644m kapsama' : 'Zoom lvl 15 · 350px · ~644m coverage'}</p>
                     </div>
                   </div>
 
@@ -1015,6 +972,8 @@ export default function Presentation() {
 
                     </div>
                   </div>
+
+
 
                   {/* Tier 3: AI Engine Layer */}
                   <div className="w-full relative">
@@ -1211,6 +1170,52 @@ export default function Presentation() {
                 </div>
 
               </div>
+
+              {/* Row 2: Charts placed under Row 1 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+
+                {/* Chart A — Training Loss */}
+                <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 text-[10px] font-black tracking-wider text-slate-600 uppercase mb-6">
+                    <Activity size={12} />
+                    {isTr ? 'KAYIP DİNAMİKLERİ (EPOK 1-10)' : 'LOSS DYNAMICS (EPOCH 1-10)'}
+                  </div>
+
+                  <div className="h-[220px] w-full text-xs flex items-center justify-center">
+                    <LineChart width={440} height={275} data={lossData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                      <XAxis dataKey="epoch" stroke="#94a3b8" />
+                      <YAxis domain={[0, 0.1]} stroke="#94a3b8" />
+                      <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
+                      <Legend verticalAlign="top" height={36} iconType="circle" />
+                      <Line type="linear" dataKey="trainLoss" name={isTr ? 'Eğitim Kaybı' : 'Training Loss'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                      <Line type="linear" dataKey="valLoss" name={isTr ? 'Doğrulama Kaybı' : 'Validation Loss'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    </LineChart>
+                  </div>
+                </div>
+
+                {/* Chart B — Training Accuracy */}
+                <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 text-[10px] font-black tracking-wider text-slate-600 uppercase mb-6">
+                    <Activity size={12} />
+                    {isTr ? 'DOĞRULUK DİNAMİKLERİ (EPOK 1-10)' : 'ACCURACY DYNAMICS (EPOCH 1-10)'}
+                  </div>
+
+                  <div className="h-[220px] w-full text-xs flex items-center justify-center">
+                    <LineChart width={440} height={275} data={accuracyData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                      <XAxis dataKey="epoch" stroke="#94a3b8" />
+                      <YAxis domain={[95, 100]} stroke="#94a3b8" />
+                      <Tooltip contentStyle={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
+                      <Legend verticalAlign="top" height={36} iconType="circle" />
+                      <Line type="linear" dataKey="trainAcc" name={isTr ? 'Eğitim Doğruluğu' : 'Training Accuracy'} stroke="#10b981" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                      <Line type="linear" dataKey="valAcc" name={isTr ? 'Doğrulama Doğruluğu' : 'Validation Accuracy'} stroke="#3b82f6" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    </LineChart>
+                  </div>
+                </div>
+
+              </div>
+
               {/* Sub-section D: Spatial Weighting Visualizer */}
               <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all duration-300 mb-8">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
