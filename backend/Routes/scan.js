@@ -16,11 +16,11 @@ router.post('/analyze', auth, async (req, res) => {
   console.log(process.env.API_LOCAL);
 
   try {
-    // 1. Call Flask AI (timeout: 110s — model processes 9 tiles ~45-90s)
+    // 1. Call Flask AI
     const flaskResponse = await axios.post(process.env.API_LOCAL, {
       lat: Number(lat),
       lng: Number(lng)
-    }, { timeout: 110000 });
+    });
 
     if (flaskResponse.status === 502 || flaskResponse.status === 504) {
       console.log("AI Service is currently waking up. Please try again in 10 seconds.")

@@ -10,7 +10,6 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 import numpy as np
 import base64
-import threading
 
 # XAI Imports
 from pytorch_grad_cam import GradCAMPlusPlus
@@ -49,8 +48,6 @@ model.eval()
 # Grad-CAM Engine Setup
 target_layer = [model.features[18]] # Last conv layer of MobileNetV2
 cam_engine = GradCAMPlusPlus(model=model, target_layers=target_layer)
-# GradCAM is NOT thread-safe — use a lock so only one thread runs it at a time
-gradcam_lock = threading.Lock()
 
 # Transforms
 transform = transforms.Compose([
@@ -99,11 +96,11 @@ def process_point(args):
                 probs = torch.nn.functional.softmax(outputs[0], dim=0)
                 high_risk_prob = float(probs[1].item())
 
-            # 3. Generate Grad-CAM Overlay (locked — not thread-safe)
+            # 3. Generate Grad-CAM Overlay
             print(f"DEBUG: [ {label} ] Grad-CAM...")
-            targets = [ClassifierOutputTarget(1)]
-            with gradcam_lock:
-                grayscale_cam = cam_engine(input_tensor=img_normalized, targets=targets, aug_smooth=False, eigen_smooth=False)[0]
+            targets = [ClassifierOutputTarget(1)] 
+            # Force everything to be serial and simple to avoid segmentation fault
+            grayscale_cam = cam_engine(input_tensor=img_normalized, targets=targets, aug_smooth=False, eigen_smooth=False)[0]
             
             # Create RGB Heatmap overlay
             cam_image = show_cam_on_image(raw_img_np, grayscale_cam, use_rgb=True)
@@ -167,7 +164,7 @@ def predict():
 
         tasks = [(lat, lng, w, lbl) for (lat, lng), w, lbl in zip(coords, weights, labels)]
 
-        with ThreadPoolExecutor(max_workers=9) as executor:
+        with ThreadPoolExecutor(max_workers=1) as executor:
             grid_results = list(executor.map(process_point, tasks))
 
         total_score = sum(item.get('weighted_contribution', 0) for item in grid_results)
