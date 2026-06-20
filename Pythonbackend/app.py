@@ -126,6 +126,10 @@ def process_point(args):
         traceback.print_exc()
         return {"label": label, "lat": lat, "lng": lng, "mapbox_url": url, "error": str(e)}
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "ok", "message": "ForeSpark Python API is running 🔥"})
+
 @app.route('/predict', methods=['POST'])
 def predict():
     print("hello")
