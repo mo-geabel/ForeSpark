@@ -1,34 +1,21 @@
-const jwt = require('jsonwebtoken');
-const User = require('../Models/User');
+const auth = require('./auth');
 
-const adminProtect = async (req, res, next) => {
-  let token;
-
-  // 1. Check if token exists in headers
-  if (req.header('x-auth-token')) {
-    token = req.header('x-auth-token');
-  }
-
-  if (!token) {
-    return res.status(401).json({ message: "Not authorized, no token" });
-  }
-
-  try {
-    // 2. Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    // 3. Find user and check role
-    const user = await User.findById(decoded.user.id);
-
-    if (user && user.role === 'admin') {
-      req.user = user; // Pass user data to the next function
-      next();
-    } else {
-      res.status(403).json({ message: "Access denied: Admins only" });
+const adminProtect = (req, res, next) => {
+  auth(req, res, () => {
+    if (!req.user) {
+      return res.status(401).json({ message: "Not authorized, user not found" });
     }
-  } catch (error) {
-    res.status(401).json({ message: "Token is not valid" });
-  }
+
+    if (req.user.isPaused) {
+      return res.status(403).json({ message: "Your account is paused. Please contact an administrator." });
+    }
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Access denied: Admins only" });
+    }
+
+    next();
+  });
 };
 
 module.exports = adminProtect;

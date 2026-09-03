@@ -54,7 +54,8 @@ router.post('/register', async (req, res) => {
           id: user._id,
           fullName: user.fullName,
           email: user.email,
-          role: user.role
+          role: user.role,
+          isPaused: user.isPaused || false
         };
         res.json({ token, user: userResponse });
       }
@@ -86,6 +87,11 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 
+    // Check if account is paused
+    if (user.isPaused) {
+      return res.status(403).json({ message: 'Your account is paused. Please contact an administrator.' });
+    }
+
     // 2. Compare password with hashed password in DB
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -113,7 +119,8 @@ router.post('/login', async (req, res) => {
             id: user.id, 
             fullName: user.fullName, 
             email: user.email, 
-            role: user.role 
+            role: user.role,
+            isPaused: user.isPaused
           } 
         });
       }
@@ -127,16 +134,24 @@ router.post('/login', async (req, res) => {
 
 router.get('/user', auth, async (req, res) => {
   try {
-    // req.user.id was set by the middleware
-    const user = await User.findById(req.user.id).select('-password');
+    const userId = req.user._id || req.user.id;
+    const user = await User.findById(userId).select('-password');
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    res.json(user);
+    res.json({
+      id: user._id,
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      role: user.role,
+      isPaused: user.isPaused || false,
+      date: user.date
+    });
   } catch (err) {
-    console.error(err.message);
+    console.error("Error fetching user profile:", err.message);
     res.status(500).json({ message: 'Server Error' });
   }
 });
@@ -176,6 +191,11 @@ router.post('/google', async (req, res) => {
             await user.save();
         }
 
+        // Check if account is paused
+        if (user.isPaused) {
+          return res.status(403).json({ message: "Your account is paused. Please contact an administrator." });
+        }
+
         // 4. Generate JWT
         const myPayload = { user: { id: user._id, role: user.role } };
         const token = jwt.sign(myPayload, process.env.JWT_SECRET, { expiresIn: '24h' });
@@ -186,7 +206,8 @@ router.post('/google', async (req, res) => {
             id: user._id,
             fullName: user.fullName,
             email: user.email,
-            role: user.role
+            role: user.role,
+            isPaused: user.isPaused || false
         };
         
         return res.status(200).json({ token, user: userResponse });

@@ -73,7 +73,7 @@ def process_point(args):
     print(f"DEBUG: [ {label} ] Starting processing...")
     try:
         url = f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lng},{lat},15,0/350x350?access_token={MAPBOX_TOKEN}&logo=false&attribution=false"
-        print(f"DEBUG: [ {label} ] URL → {url}")
+        print(f"DEBUG: [ {label} ] URL -> {url}")
         resp = requests.get(url, timeout=10)
         
         if resp.status_code == 200:

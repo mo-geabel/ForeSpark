@@ -4,8 +4,8 @@ interface HeroProps {
   onStart: () => void;
 }
 
-export default function Hero({}: HeroProps) {
-  
+export default function Hero({ }: HeroProps) {
+
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const handleStartAnalysis = () => {
@@ -21,9 +21,9 @@ export default function Hero({}: HeroProps) {
     <header className="relative h-screen w-full flex items-center justify-center px-6 overflow-hidden bg-white">
       {/* BACKGROUND IMAGE - Low Opacity */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2000" 
-          className="w-full h-full object-cover opacity-100" 
+        <img
+          src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2000"
+          className="w-full h-full object-cover opacity-100"
           alt="Forest"
         />
         {/* Light Fade: Top is white, middle is clear, bottom is white */}
@@ -31,16 +31,10 @@ export default function Hero({}: HeroProps) {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
-        
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 mt-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[12px] -[0.2em] mb-8 uppercase">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            CANADA REGION 
-          </div>
+
+
         <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9] mb-8 text-slate-900">
-          AI <span className='text-emerald-600'>Wild</span><span className='text-orange-500'>Fire</span> <br /> 
+          AI <span className='text-emerald-600'>Wild</span><span className='text-orange-500'>Fire</span> <br />
           <span className="text-slate-900">Prediction</span>
         </h1>
         <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-2xl mx-auto">

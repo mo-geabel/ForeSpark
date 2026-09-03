@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+  clerkId: { type: String, unique: true, sparse: true },
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   role: { type: String, default: 'user' },
+  isPaused: { type: Boolean, default: false },
   date: { type: Date, default: Date.now }
 });
 

@@ -8,10 +8,20 @@ import Documentation from './Component/Documentation';
 import AnalysisPage from './Component/AnalysisPage';
 import Presentation from './Component/Presentation';
 
+import AdminPanel from './Component/AdminPanel';
+
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
+};
+
+// Admin Protected Route Component
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/" replace />;
+  if (user?.role !== 'admin') return <Navigate to="/" replace />;
+  return <>{children}</>;
 };
 
 function App() {
@@ -55,6 +65,14 @@ function App() {
               <ProtectedRoute>
                 <History />
               </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <AdminRoute>
+                <AdminPanel />
+              </AdminRoute>
             } 
           />
         </Routes>

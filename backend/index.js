@@ -5,6 +5,7 @@ dotenv.config();
 const authRoutes = require("./Routes/auth");
 const adminRoutes = require("./Routes/adminRoutes");
 const scanRoutes = require("./Routes/scan");
+const policyRoutes = require("./Routes/policyRoutes");
 const app = express();
 const cors = require("cors");
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/scans", scanRoutes);
+app.use("/api/policies", policyRoutes);
 app.get("/", (req, res) => {
   res.json({ status: "Backend is working" });
 });

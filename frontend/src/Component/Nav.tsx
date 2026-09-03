@@ -52,6 +52,11 @@ export default function Navbar() {
               {user?.role === 'admin' ? 'Scan Users History' : 'My History'}
             </Link>
           )}
+          {isAuthenticated && user?.role === 'admin' && (
+            <Link to="/admin" className="text-emerald-600 font-extrabold hover:text-emerald-700 cursor-pointer transition-colors flex items-center gap-1">
+              Admin Panel
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button & Auth Tabs Container */}
@@ -107,6 +112,11 @@ export default function Navbar() {
             {isAuthenticated && (
               <Link to="/history" onClick={closeMenu} className="hover:text-emerald-600 cursor-pointer transition-colors">
                 {user?.role === 'admin' ? 'Scan Users History' : 'My History'}
+              </Link>
+            )}
+            {isAuthenticated && user?.role === 'admin' && (
+              <Link to="/admin" onClick={closeMenu} className="text-emerald-600 font-extrabold hover:text-emerald-700 cursor-pointer transition-colors">
+                Admin Panel
               </Link>
             )}
           </div>
