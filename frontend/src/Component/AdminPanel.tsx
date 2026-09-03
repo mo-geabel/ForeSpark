@@ -69,21 +69,26 @@ export default function AdminPanel() {
   const [showPolicyPreviewModal, setShowPolicyPreviewModal] = useState(false);
 
   const token = localStorage.getItem('fireforest_token');
+  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/users', {
-        headers: { 'x-auth-token': token || '' },
+      const response = await fetch(`${API_URL}/api/admin/users`, {
+        headers: {
+          'x-auth-token': token || '',
+          'Authorization': `Bearer ${token || ''}`,
+        },
       });
-      const data = await response.json();
-      if (response.ok) {
+      const contentType = response.headers.get('content-type');
+      if (response.ok && contentType && contentType.includes('application/json')) {
+        const data = await response.json();
         setUsers(data.users || []);
         if (data.summary) {
           setSummary(data.summary);
         }
       } else {
-        setFeedbackMessage({ type: 'error', text: data.message || 'Failed to fetch users.' });
+        setFeedbackMessage({ type: 'error', text: 'Failed to fetch users.' });
       }
     } catch (err: any) {
       setFeedbackMessage({ type: 'error', text: err.message || 'Network error fetching users.' });
@@ -94,14 +99,17 @@ export default function AdminPanel() {
 
   const fetchPolicy = async () => {
     try {
-      const response = await fetch('/api/policies');
-      const data = await response.json();
-      if (data && data.title) {
-        setPolicyTitle(data.title);
-        setPolicyContent(data.content || '');
-        setPolicyRequireAcceptance(data.requireAcceptance ?? true);
-        setPolicyLastUpdated(data.lastUpdated || '');
-        setPolicyUpdatedBy(data.updatedBy || 'Admin');
+      const response = await fetch(`${API_URL}/api/policies`);
+      const contentType = response.headers.get('content-type');
+      if (response.ok && contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+        if (data && data.title) {
+          setPolicyTitle(data.title);
+          setPolicyContent(data.content || '');
+          setPolicyRequireAcceptance(data.requireAcceptance ?? true);
+          setPolicyLastUpdated(data.lastUpdated || '');
+          setPolicyUpdatedBy(data.updatedBy || 'Admin');
+        }
       }
     } catch (err: any) {
       console.error('Error fetching policy:', err);
@@ -125,7 +133,7 @@ export default function AdminPanel() {
 
     setPolicySaving(true);
     try {
-      const response = await fetch('/api/policies', {
+      const response = await fetch(`${API_URL}/api/policies`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

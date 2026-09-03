@@ -25,7 +25,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
+  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
 
   // Dynamic Policy state
   const [policy, setPolicy] = useState<{ title: string; content: string; requireAcceptance: boolean; lastUpdated?: string } | null>(null);
@@ -34,7 +34,13 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
 
   useEffect(() => {
     fetch(`${API_URL}/api/policies`)
-      .then(res => res.json())
+      .then(res => {
+        const contentType = res.headers.get('content-type');
+        if (res.ok && contentType && contentType.includes('application/json')) {
+          return res.json();
+        }
+        return null;
+      })
       .then(data => {
         if (data && data.title) setPolicy(data);
       })
