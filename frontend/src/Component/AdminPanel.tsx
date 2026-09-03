@@ -19,7 +19,6 @@ import {
   Save,
   Eye,
   RotateCcw,
-  CheckCircle2,
 } from 'lucide-react';
 
 interface ManagedUser {
