@@ -13,11 +13,12 @@ router.post('/analyze', auth, async (req, res) => {
   console.log("hello");
   const { lat, lng, name } = req.body;
   console.log(lat, lng, name);
-  console.log(process.env.API_LOCAL);
+  const pythonApiUrl = process.env.PYTHON_API_URL || process.env.API_HOST || process.env.API_LOCAL || 'http://127.0.0.1:5001/predict';
+  console.log("Calling Python AI model at:", pythonApiUrl);
 
   try {
     // 1. Call Flask AI
-    const flaskResponse = await axios.post(process.env.API_LOCAL, {
+    const flaskResponse = await axios.post(pythonApiUrl, {
       lat: Number(lat),
       lng: Number(lng)
     });
