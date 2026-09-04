@@ -57,6 +57,8 @@ function FeedbackSection({
   );
 }
 
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
+
 /* =========================
    Analysis Page
 ========================= */
@@ -76,7 +78,7 @@ export default function AnalysisPage() {
   /* Fetch if page refreshed */
   useEffect(() => {
     if (!analysisResult && id) {
-      fetch(`http://localhost:5000/api/scans/${id}`, {
+      fetch(`${API_URL}/api/scans/${id}`, {
         headers: {
           "x-auth-token": localStorage.getItem("fireforest_token") || ""
         }
@@ -91,7 +93,7 @@ export default function AnalysisPage() {
     if (!analysisResult) return;
 
     await fetch(
-      `http://localhost:5000/api/scans/feedback/${id}`,
+      `${API_URL}/api/scans/feedback/${id}`,
       {
         method: "PATCH",
         headers: {

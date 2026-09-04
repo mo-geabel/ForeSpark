@@ -214,11 +214,13 @@ These policies may be revised periodically by administrators. Continued use of F
 
     setActionLoadingId(targetUser._id);
     try {
-      const response = await fetch(`/api/admin/users/${targetUser._id}/role`, {
+      const response = await fetch(`${API_URL}/api/admin/users/${targetUser._id}/role`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'x-auth-token': token || '',
+          'Authorization': `Bearer ${token || ''}`,
+          'x-user-email': currentUser?.email || '',
         },
         body: JSON.stringify({ role: newRole }),
       });
@@ -260,11 +262,13 @@ These policies may be revised periodically by administrators. Continued use of F
 
     setActionLoadingId(targetUser._id);
     try {
-      const response = await fetch(`/api/admin/users/${targetUser._id}/status`, {
+      const response = await fetch(`${API_URL}/api/admin/users/${targetUser._id}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'x-auth-token': token || '',
+          'Authorization': `Bearer ${token || ''}`,
+          'x-user-email': currentUser?.email || '',
         },
         body: JSON.stringify({ isPaused: willPause }),
       });
@@ -306,9 +310,13 @@ These policies may be revised periodically by administrators. Continued use of F
 
     setActionLoadingId(targetUser._id);
     try {
-      const response = await fetch(`/api/admin/users/${targetUser._id}`, {
+      const response = await fetch(`${API_URL}/api/admin/users/${targetUser._id}`, {
         method: 'DELETE',
-        headers: { 'x-auth-token': token || '' },
+        headers: {
+          'x-auth-token': token || '',
+          'Authorization': `Bearer ${token || ''}`,
+          'x-user-email': currentUser?.email || '',
+        },
       });
       const data = await response.json();
 
