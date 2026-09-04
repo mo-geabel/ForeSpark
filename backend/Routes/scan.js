@@ -13,7 +13,10 @@ router.post('/analyze', auth, async (req, res) => {
   console.log("hello");
   const { lat, lng, name } = req.body;
   console.log(lat, lng, name);
-  const pythonApiUrl = process.env.PYTHON_API_URL || process.env.API_HOST || process.env.API_LOCAL || 'http://127.0.0.1:5001/predict';
+  const isProd = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+  const pythonApiUrl = process.env.PYTHON_API_URL || 
+    (isProd ? (process.env.API_HOST || process.env.API_LOCAL) : (process.env.API_LOCAL || process.env.API_HOST)) || 
+    'http://127.0.0.1:5001/predict';
   console.log("Calling Python AI model at:", pythonApiUrl);
 
   try {
