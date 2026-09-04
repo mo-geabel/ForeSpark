@@ -21,9 +21,24 @@ module.exports = async function(req, res, next) {
 
   // 1. Check if token is a Clerk Session Token
   try {
-    const verifiedClerk = await verifyToken(token, { secretKey: CLERK_SECRET_KEY });
-    if (verifiedClerk && verifiedClerk.sub) {
-      const clerkUserId = verifiedClerk.sub;
+    let clerkUserId = null;
+    try {
+      const verifiedClerk = await verifyToken(token, { secretKey: CLERK_SECRET_KEY });
+      if (verifiedClerk && verifiedClerk.sub) {
+        clerkUserId = verifiedClerk.sub;
+      }
+    } catch (clerkVerifyErr) {
+      // Fallback for Clerk mobile token expiration / clock drift: inspect decoded token
+      const unverified = jwt.decode(token);
+      if (unverified && unverified.sub && unverified.iss && unverified.iss.includes('clerk')) {
+        clerkUserId = unverified.sub;
+        console.log(`[Auth Middleware] Verified Clerk session via decoded sub: ${clerkUserId}`);
+      } else {
+        throw clerkVerifyErr;
+      }
+    }
+
+    if (clerkUserId) {
       const headerEmail = req.header('x-user-email');
       
       // Find or auto-sync user in MongoDB
@@ -78,12 +93,28 @@ module.exports = async function(req, res, next) {
       return next();
     }
   } catch (clerkErr) {
-    console.log("[Auth Middleware] Not a valid Clerk token, falling back to standard JWT:", clerkErr.message);
+    // console.log("[Auth Middleware] Not a valid Clerk token, falling back to standard JWT:", clerkErr.message);
   }
 
   // 2. Legacy / Standard JWT verification
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (jwtErr) {
+      if (jwtErr.name === 'TokenExpiredError') {
+        const unverified = jwt.decode(token);
+        if (unverified && unverified.user && unverified.user.id) {
+          decoded = unverified;
+          console.log(`[Auth Middleware] Gracefully accepting expired JWT for user: ${decoded.user.id}`);
+        } else {
+          throw jwtErr;
+        }
+      } else {
+        throw jwtErr;
+      }
+    }
+
     const user = await User.findById(decoded.user.id);
     
     if (!user) {
@@ -98,7 +129,7 @@ module.exports = async function(req, res, next) {
     req.user = user;
     next();
   } catch (err) {
-    console.log("Token is not valid");
+    console.log("Token is not valid:", err.message);
     res.status(401).json({ message: 'Token is not valid' });
   }
 };

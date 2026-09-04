@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '24h' },
+      { expiresIn: '365d' },
       (err, token) => {
         if (err) throw err;
         // Don't send the password back to the frontend for security
@@ -109,7 +109,7 @@ router.post('/login', async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '24h' },
+      { expiresIn: '365d' },
       (err, token) => {
         if (err) throw err;
         // Return token and basic user info (excluding password)
@@ -239,7 +239,7 @@ router.post('/google', async (req, res) => {
 
         // 4. Generate JWT
         const myPayload = { user: { id: user._id, role: user.role } };
-        const token = jwt.sign(myPayload, process.env.JWT_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign(myPayload, process.env.JWT_SECRET, { expiresIn: '365d' });
 
         // 5. SEND THE RESPONSE (Crucial!)
         // Format the user response EXACTLY like normal login to avoid frontend state issues
