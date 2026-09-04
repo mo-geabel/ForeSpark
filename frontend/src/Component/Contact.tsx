@@ -5,26 +5,44 @@ import emailjs from '@emailjs/browser';
 export default function Contact() {
   const form = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
-  const [email, setEmail] = useState('');
 
-  const sendEmail = (e: React.FormEvent) => {
+  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.current) return;
 
     setStatus('sending');
 
-    emailjs.sendForm(
+    // Extract values directly from form elements (supports typing, paste, browser autofill)
+    const formData = new FormData(e.currentTarget);
+    const senderName = (formData.get('from_name') as string || '').trim();
+    const senderEmail = (formData.get('reply_to') as string || formData.get('from_email') as string || '').trim();
+    const messageText = (formData.get('message') as string || '').trim();
+
+    // Map to all standard EmailJS template variable names
+    const templateParams = {
+      from_name: senderName,
+      name: senderName,
+      user_name: senderName,
+      reply_to: senderEmail,
+      from_email: senderEmail,
+      email: senderEmail,
+      user_email: senderEmail,
+      sender_email: senderEmail,
+      message: messageText,
+    };
+
+    emailjs.send(
       import.meta.env.VITE_EMAILJS_SERVICE_ID, 
       import.meta.env.VITE_EMAILJS_TEMPLATE_ID, 
-      form.current, 
+      templateParams, 
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     )
     .then(() => {
         setStatus('success');
-        setEmail('');
         form.current?.reset();
-    }, (error) => {
-        console.log(error.text);
+    })
+    .catch((error) => {
+        console.error("EmailJS sending error:", error);
         setStatus('error');
     });
   };
@@ -44,7 +62,13 @@ export default function Contact() {
             <form ref={form} className="grid md:grid-cols-2 gap-6" onSubmit={sendEmail}>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Full Name</label>
-                <input name="from_name" required type="text" placeholder="Jeff Dalton" className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"/>
+                <input 
+                  name="from_name" 
+                  required 
+                  type="text" 
+                  placeholder="Jeff Dalton" 
+                  className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Email Address</label>
@@ -53,18 +77,17 @@ export default function Contact() {
                   required 
                   type="email" 
                   placeholder="dalton@example.com" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-black"
                 />
-                <input type="hidden" name="from_email" value={email} />
-                <input type="hidden" name="email" value={email} />
-                <input type="hidden" name="user_email" value={email} />
-                <input type="hidden" name="sender_email" value={email} />
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-[10px] uppercase font-bold text-slate-500 ml-4 tracking-widest">Message</label>
-                <textarea name="message" required placeholder="Tell us about your project..." className="w-full bg-white border border-slate-200 p-4 rounded-2xl h-40 outline-none focus:border-emerald-500/50 transition-all text-black resize-none"></textarea>
+                <textarea 
+                  name="message" 
+                  required 
+                  placeholder="Tell us about your project..." 
+                  className="w-full bg-white border border-slate-200 p-4 rounded-2xl h-40 outline-none focus:border-emerald-500/50 transition-all text-black resize-none"
+                ></textarea>
               </div>
               
               <button 
