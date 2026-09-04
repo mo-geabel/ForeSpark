@@ -9,7 +9,13 @@ const policyRoutes = require("./Routes/policyRoutes");
 const app = express();
 const cors = require("cors");
 
-app.use(cors());
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
+}));
+app.options("*", cors());
 
 const PORT = process.env.PORT || 5000;
 // Add this line with your other middlewares in server.

@@ -59,7 +59,8 @@ export default function History() {
   useEffect(() => {
     const fetchHistory = async () => {
       const token = localStorage.getItem('fireforest_token');
-      const endpoint = user?.role === 'admin' ? '/api/admin/master-history' : '/api/scans/my-history';
+      const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
+      const endpoint = user?.role === 'admin' ? `${API_URL}/api/admin/master-history` : `${API_URL}/api/scans/my-history`;
       
       try {
         const response = await fetch(endpoint, {

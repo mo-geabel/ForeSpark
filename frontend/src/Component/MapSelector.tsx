@@ -172,7 +172,8 @@ export default function MapSelector() {
     if (!markerPos) return;
     setIsAnalyzing(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/scans/analyze`, {
+      const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
+      const response = await fetch(`${API_URL}/api/scans/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
