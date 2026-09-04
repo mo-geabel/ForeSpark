@@ -172,21 +172,17 @@ def predict():
 
             orig_b64 = pil_to_base64(base_img)
 
-            # Generate Grad-CAM for CENTER tile or any tile with significant risk
-            # (Skips expensive backpropagation on cold, zero-risk peripheral tiles)
-            if lbl == "CENTER" or prob >= 0.35:
-                try:
-                    norm_tensor = transform(base_img).unsqueeze(0).to(device)
-                    raw_np = np.array(base_img).astype(np.float32) / 255.0
+            # Generate Grad-CAM XAI overlay for all tiles
+            try:
+                norm_tensor = transform(base_img).unsqueeze(0).to(device)
+                raw_np = np.array(base_img).astype(np.float32) / 255.0
 
-                    grayscale_cam = cam_engine(input_tensor=norm_tensor, targets=cam_targets, aug_smooth=False, eigen_smooth=False)[0]
-                    cam_image = show_cam_on_image(raw_np, grayscale_cam, use_rgb=True)
-                    cam_pil = Image.fromarray(cam_image)
-                    expl_b64 = pil_to_base64(cam_pil)
-                except Exception as cam_err:
-                    print(f"GradCAM fallback for {lbl}: {cam_err}")
-                    expl_b64 = orig_b64
-            else:
+                grayscale_cam = cam_engine(input_tensor=norm_tensor, targets=cam_targets, aug_smooth=False, eigen_smooth=False)[0]
+                cam_image = show_cam_on_image(raw_np, grayscale_cam, use_rgb=True)
+                cam_pil = Image.fromarray(cam_image)
+                expl_b64 = pil_to_base64(cam_pil)
+            except Exception as cam_err:
+                print(f"GradCAM fallback for {lbl}: {cam_err}")
                 expl_b64 = orig_b64
 
             grid_results.append({
