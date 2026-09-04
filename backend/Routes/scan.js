@@ -15,8 +15,8 @@ router.post('/analyze', auth, async (req, res) => {
   console.log(lat, lng, name);
   const isProd = process.env.NODE_ENV === 'production' || process.env.VERCEL;
   const pythonApiUrl = isProd
-    ? (process.env.PYTHON_API_URL || process.env.API_HOST || process.env.API_LOCAL || 'http://127.0.0.1:5001/predict')
-    : (process.env.API_LOCAL || process.env.PYTHON_API_URL || process.env.API_HOST || 'http://127.0.0.1:5001/predict');
+    ? (process.env.PYTHON_API_URL || process.env.API_HOST || 'https://foresparkai.onrender.com/predict')
+    : (process.env.API_LOCAL || 'http://127.0.0.1:5001/predict');
   console.log("Calling Python AI model at:", pythonApiUrl);
 
   try {
