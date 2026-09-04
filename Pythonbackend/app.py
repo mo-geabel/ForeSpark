@@ -41,7 +41,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = models.mobilenet_v2(weights=None) # pretrained=False is deprecated
 num_ftrs = model.classifier[1].in_features
 model.classifier[1] = nn.Linear(num_ftrs, 2) 
-model.load_state_dict(torch.load('best_wildfire_model_MobileNetV2.pth', map_location=device))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, 'best_wildfire_model_MobileNetV2.pth')
+model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model.to(device)
 model.eval()
 
