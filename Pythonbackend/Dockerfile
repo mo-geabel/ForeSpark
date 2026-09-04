@@ -10,8 +10,12 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-# Force headless opencv AFTER grad-cam (which pulls in full opencv-python as a dep)
-RUN pip install --no-cache-dir --force-reinstall opencv-python-headless==4.9.0.80
+# Force headless opencv and strictly pin numpy==1.26.4 (NumPy 2.x breaks OpenCV ABI)
+RUN pip uninstall -y opencv-python && \
+    pip install --no-cache-dir --force-reinstall "opencv-python-headless==4.9.0.80" "numpy==1.26.4"
+
+# Verify OpenCV and NumPy work before starting
+RUN python -c "import cv2, numpy; print('Verified: cv2', cv2.__version__, 'numpy', numpy.__version__)"
 
 COPY . .
 
