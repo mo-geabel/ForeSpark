@@ -191,10 +191,11 @@ export default function MapSelector() {
             userNotes: userNotesRef.current
           }
         });
-
+      } else {
+        alert(data.message || data.error || "Analysis failed. Please try again.");
       }
     } catch (err) {
-      alert("Error connecting to AI service");
+      alert("Error connecting to AI service. Please check your network connection.");
     } finally {
       setIsAnalyzing(false);
     }

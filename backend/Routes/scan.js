@@ -21,14 +21,16 @@ router.post('/analyze', auth, async (req, res) => {
 
   try {
     // 1. Call Flask AI
-    const flaskResponse = await axios.post(pythonApiUrl, {
-      lat: Number(lat),
-      lng: Number(lng)
-    });
-
-    if (flaskResponse.status === 502 || flaskResponse.status === 504) {
-      console.log("AI Service is currently waking up. Please try again in 10 seconds.")
-    }
+    const flaskResponse = await axios.post(
+      pythonApiUrl,
+      {
+        lat: Number(lat),
+        lng: Number(lng)
+      },
+      {
+        timeout: 45000
+      }
+    );
 
     // Flask returns: { result: "High Risk", total_probability: 0.85, grid_data: [...] }
     const { result, total_probability, grid_data } = flaskResponse.data;
@@ -96,8 +98,12 @@ router.post('/analyze', auth, async (req, res) => {
 
   } catch (err) {
     console.error('Bridge Error:', err.message);
-    res.status(500).json({
-      message: 'Analysis alignment failed',
+    const status = err.response?.status || 500;
+    const isServiceWaking = status === 502 || status === 503 || status === 504 || err.code === 'ECONNABORTED';
+    res.status(isServiceWaking ? 503 : 500).json({
+      message: isServiceWaking
+        ? 'AI Service is currently warming up or busy. Please try again in a few seconds.'
+        : (err.response?.data?.error || err.message || 'Analysis alignment failed'),
       error: err.message
     });
   }
