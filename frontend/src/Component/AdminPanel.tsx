@@ -19,6 +19,8 @@ import {
   Save,
   Eye,
   RotateCcw,
+  Settings,
+  Phone,
 } from 'lucide-react';
 
 interface ManagedUser {
@@ -39,11 +41,11 @@ interface SummaryData {
 }
 
 export default function AdminPanel() {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, updateUser } = useAuth();
   const navigate = useNavigate();
 
-  // Navigation tab: 'users' vs 'policies'
-  const [adminSection, setAdminSection] = useState<'users' | 'policies'>('users');
+  // Navigation tab: 'users' vs 'policies' vs 'settings'
+  const [adminSection, setAdminSection] = useState<'users' | 'policies' | 'settings'>('users');
 
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [summary, setSummary] = useState<SummaryData>({
@@ -67,6 +69,58 @@ export default function AdminPanel() {
   const [policyUpdatedBy, setPolicyUpdatedBy] = useState('');
   const [policySaving, setPolicySaving] = useState(false);
   const [showPolicyPreviewModal, setShowPolicyPreviewModal] = useState(false);
+
+  // Admin Profile state
+  const [adminFullName, setAdminFullName] = useState(currentUser?.fullName || '');
+  const [adminPhone, setAdminPhone] = useState(currentUser?.phoneNumber || '');
+  const [adminSaving, setAdminSaving] = useState(false);
+
+  useEffect(() => {
+    if (currentUser) {
+      setAdminFullName(currentUser.fullName || '');
+      setAdminPhone(currentUser.phoneNumber || '');
+    }
+  }, [currentUser]);
+
+  const handleSaveAdminProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!adminFullName.trim()) {
+      showNotification('error', 'Full Name cannot be empty.');
+      return;
+    }
+
+    setAdminSaving(true);
+    try {
+      const response = await fetch(`${API_URL}/api/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token || '',
+          'Authorization': `Bearer ${token || ''}`,
+          'x-user-email': currentUser?.email || '',
+        },
+        body: JSON.stringify({
+          fullName: adminFullName.trim(),
+          phoneNumber: adminPhone.trim(),
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        updateUser({
+          fullName: data.user.fullName,
+          phoneNumber: data.user.phoneNumber,
+        });
+        showNotification('success', 'Admin profile details updated successfully!');
+      } else {
+        showNotification('error', data.message || 'Failed to update profile.');
+      }
+    } catch (err: any) {
+      showNotification('error', err.message || 'Server error updating profile.');
+    } finally {
+      setAdminSaving(false);
+    }
+  };
 
   const token = localStorage.getItem('fireforest_token');
   const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
@@ -461,6 +515,18 @@ These policies may be revised periodically by administrators. Continued use of F
             <FileText size={16} />
             Policies & Terms Editor
           </button>
+
+          <button
+            onClick={() => setAdminSection('settings')}
+            className={`px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center gap-2 ${
+              adminSection === 'settings'
+                ? 'bg-white text-slate-900 shadow-sm'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Settings size={16} />
+            Admin Profile & Settings
+          </button>
         </div>
 
         {adminSection === 'users' && (
@@ -841,6 +907,78 @@ These policies may be revised periodically by administrators. Continued use of F
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {adminSection === 'settings' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-xl space-y-6">
+            <div className="border-b border-slate-100 pb-6">
+              <h2 className="text-2xl font-black text-slate-900 flex items-center gap-2">
+                <Settings className="text-emerald-600" size={24} />
+                Admin Profile & Platform Settings
+              </h2>
+              <p className="text-slate-500 text-xs mt-1">
+                Update your administrative profile name and contact telephone number.
+              </p>
+            </div>
+
+            <form onSubmit={handleSaveAdminProfile} className="space-y-6 max-w-2xl">
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <Shield size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={adminFullName}
+                    onChange={(e) => setAdminFullName(e.target.value)}
+                    placeholder="Admin Full Name"
+                    required
+                    className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
+                  Telephone Number
+                </label>
+                <div className="relative">
+                  <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="tel"
+                    value={adminPhone}
+                    onChange={(e) => setAdminPhone(e.target.value)}
+                    placeholder="+1 (555) 000-0000"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                  Admin Email Address
+                </label>
+                <input
+                  type="email"
+                  value={currentUser.email}
+                  disabled
+                  className="w-full px-4 py-3.5 rounded-2xl bg-slate-100 border border-slate-200 text-sm font-semibold text-slate-500 cursor-not-allowed"
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={adminSaving}
+                  className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  <Save size={16} />
+                  {adminSaving ? 'Saving Profile...' : 'Save Admin Profile'}
+                </button>
+              </div>
+            </form>
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@ interface User {
   id: string;
   fullName: string;
   email: string;
+  phoneNumber?: string;
   role: string;
 }
 
@@ -13,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (userData: User) => void;
+  updateUser: (updatedFields: Partial<User>) => void;
   logout: () => void;
 }
 
@@ -21,6 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   login: () => {},
+  updateUser: () => {},
   logout: () => {}
 });
 
@@ -43,10 +46,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             localStorage.setItem('fireforest_token', token);
           }
           const primaryEmail = clerkUser.primaryEmailAddress?.emailAddress || '';
-          const fullName = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || clerkUser.username || 'User';
+          let fullName = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || clerkUser.username || 'User';
 
           let fetchedRole = 'user';
           let fetchedId = clerkUser.id;
+          let fetchedPhone = clerkUser.primaryPhoneNumber?.phoneNumber || '';
 
           if (token) {
             try {
@@ -64,6 +68,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 if (userData) {
                   if (userData.role) fetchedRole = userData.role;
                   if (userData._id || userData.id) fetchedId = userData._id || userData.id;
+                  if (userData.fullName) fullName = userData.fullName;
+                  if (userData.phoneNumber) fetchedPhone = userData.phoneNumber;
                 }
               }
             } catch (err) {
@@ -75,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             id: fetchedId,
             fullName,
             email: primaryEmail,
+            phoneNumber: fetchedPhone,
             role: fetchedRole,
           });
         } catch (err) {
@@ -99,6 +106,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 id: userData._id || userData.id,
                 fullName: userData.fullName,
                 email: userData.email,
+                phoneNumber: userData.phoneNumber || '',
                 role: userData.role || 'user',
               });
             } else {
@@ -121,6 +129,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(userData);
   };
 
+  const updateUser = (updatedFields: Partial<User>) => {
+    setUser((prev) => (prev ? { ...prev, ...updatedFields } : null));
+  };
+
   const logout = async () => {
     if (isSignedIn) {
       await signOut();
@@ -136,6 +148,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user, 
       loading, 
       login, 
+      updateUser,
       logout 
     }}>
       {!loading && children}

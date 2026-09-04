@@ -146,6 +146,7 @@ router.get('/user', auth, async (req, res) => {
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
+      phoneNumber: user.phoneNumber || '',
       role: user.role,
       isPaused: user.isPaused || false,
       date: user.date
@@ -153,6 +154,46 @@ router.get('/user', auth, async (req, res) => {
   } catch (err) {
     console.error("Error fetching user profile:", err.message);
     res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   PUT api/auth/profile
+// @desc    Update user profile (fullName, phoneNumber)
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const { fullName, phoneNumber } = req.body;
+    const userId = req.user._id || req.user.id;
+
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (fullName !== undefined && fullName.trim() !== '') {
+      user.fullName = fullName.trim();
+    }
+    if (phoneNumber !== undefined) {
+      user.phoneNumber = phoneNumber.trim();
+    }
+
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phoneNumber: user.phoneNumber || '',
+        role: user.role,
+        isPaused: user.isPaused || false,
+        date: user.date
+      }
+    });
+  } catch (err) {
+    console.error("Error updating user profile:", err.message);
+    res.status(500).json({ message: 'Server error updating profile', error: err.message });
   }
 });
 
