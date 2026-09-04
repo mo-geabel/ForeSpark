@@ -4,7 +4,10 @@ dotenv.config();
 const User = require('../Models/User');
 const { createClerkClient, verifyToken } = require('@clerk/backend');
 
-const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY || 'sk_test_xERiwvcwbJhCW9MWSgZpes4h4RBy07TA1BPsnk8QrA';
+const JWT_SECRET = process.env.JWT_SECRET || '.kgfdjlkdhiythksdhflkug';
+
+const clerkClient = createClerkClient({ secretKey: CLERK_SECRET_KEY });
 
 module.exports = async function(req, res, next) {
   // Get token from x-auth-token or Authorization Bearer header
@@ -13,12 +16,12 @@ module.exports = async function(req, res, next) {
 
   if (!token) {
     console.log("No token, authorization denied");
-    return res.status(401).json({ message: 'No token, authorization denied' });
+    return res.status(401).json({ message: 'No token, authorization denied. Please log in first.' });
   }
 
   // 1. Check if token is a Clerk Session Token
   try {
-    const verifiedClerk = await verifyToken(token, { secretKey: process.env.CLERK_SECRET_KEY });
+    const verifiedClerk = await verifyToken(token, { secretKey: CLERK_SECRET_KEY });
     if (verifiedClerk && verifiedClerk.sub) {
       const clerkUserId = verifiedClerk.sub;
       const headerEmail = req.header('x-user-email');
@@ -80,7 +83,7 @@ module.exports = async function(req, res, next) {
 
   // 2. Legacy / Standard JWT verification
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.user.id);
     
     if (!user) {
