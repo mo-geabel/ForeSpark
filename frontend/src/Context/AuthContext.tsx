@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const primaryEmail = clerkUser.primaryEmailAddress?.emailAddress || '';
           let fullName = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || clerkUser.username || 'User';
 
-          let fetchedRole = 'user';
+          let fetchedRole = (clerkUser.publicMetadata?.role as string) || 'user';
           let fetchedId = clerkUser.id;
           let fetchedPhone = clerkUser.primaryPhoneNumber?.phoneNumber || '';
 
