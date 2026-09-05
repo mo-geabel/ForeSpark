@@ -5,7 +5,7 @@ const User = require('../Models/User');
 const { createClerkClient, verifyToken } = require('@clerk/backend');
 
 const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
-const JWT_SECRET = process.env.JWT_SECRET || '.kgfdjlkdhiythksdhflkug';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const clerkClient = createClerkClient({ secretKey: CLERK_SECRET_KEY });
 
