@@ -24,9 +24,17 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
   const [error, setError] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
+
+  // Auto-redirect if user is already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      onClose();
+      navigate('/app', { replace: true });
+    }
+  }, [isAuthenticated, navigate, onClose]);
 
   // Dynamic Policy state
   const [policy, setPolicy] = useState<{ title: string; content: string; requireAcceptance: boolean; lastUpdated?: string } | null>(null);
@@ -345,7 +353,7 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
                       if (signIn) {
                         signIn.authenticateWithRedirect({
                           strategy: "oauth_google",
-                          redirectUrl: "/app",
+                          redirectUrl: "/sso-callback",
                           redirectUrlComplete: "/app",
                         });
                       }

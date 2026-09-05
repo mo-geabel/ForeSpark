@@ -7,20 +7,34 @@ import History from './Component/History';
 import Documentation from './Component/Documentation';
 import AnalysisPage from './Component/AnalysisPage';
 import Presentation from './Component/Presentation';
-
 import AdminPanel from './Component/AdminPanel';
+import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" replace />;
 };
 
 // Admin Protected Route Component
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, user } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/" replace />;
-  if (user?.role !== 'admin') return <Navigate to="/" replace />;
+  const { isAuthenticated, user, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!isAuthenticated) return <Navigate to="/auth" replace />;
+  if (user?.role !== 'admin') return <Navigate to="/app" replace />;
   return <>{children}</>;
 };
 
@@ -29,6 +43,19 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Clerk SSO Redirect Handler */}
+          <Route 
+            path="/sso-callback" 
+            element={
+              <AuthenticateWithRedirectCallback 
+                signInForceRedirectUrl="/app"
+                signUpForceRedirectUrl="/app"
+                signInFallbackRedirectUrl="/app"
+                signUpFallbackRedirectUrl="/app"
+              />
+            } 
+          />
+
           {/* Landing Page */}
           <Route path="/" element={<Home onStart={() => {}} />} />
           
