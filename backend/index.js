@@ -17,26 +17,46 @@ app.use(cors({
 }));
 
 const PORT = process.env.PORT || 5000;
-// Add this line with your other middlewares in server.
 app.use(express.json());
+
+// Ensure MongoDB connection is established before route handlers run (essential for serverless like Vercel)
+let cachedDbPromise = null;
+const ensureDbConnected = async (req, res, next) => {
+  if (req.path === "/") return next();
+  const uri = process.env.MONGO_URI;
+  if (!uri || !uri.includes("@")) {
+    console.error("❌ ERROR: MONGO_URI is missing or incomplete.");
+    return res.status(500).json({ error: "MONGO_URI is not configured in server environment." });
+  }
+  if (mongoose.connection.readyState >= 1) {
+    return next();
+  }
+  try {
+    if (!cachedDbPromise) {
+      cachedDbPromise = mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+    }
+    await cachedDbPromise;
+    next();
+  } catch (err) {
+    cachedDbPromise = null;
+    console.error("❌ Connection failed. Check your MongoDB IP Whitelist:", err.message);
+    return res.status(500).json({ 
+      error: "Database connection failed", 
+      message: "Please check that 0.0.0.0/0 is whitelisted in MongoDB Atlas Network Access.",
+      details: err.message 
+    });
+  }
+};
+
+app.use(ensureDbConnected);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/scans", scanRoutes);
 app.use("/api/policies", policyRoutes);
-app.get("/", (req, res) => {
-  res.json({ status: "Backend is working" });
-});
 
-// Connect to MongoDB
-const uri = process.env.MONGO_URI;
-if (!uri || !uri.includes("@")) {
-  console.error("❌ ERROR: Your MONGO_URI is incomplete.");
-} else {
-  // serverSelectionTimeoutMS helps fail fast if Vercel's IP is blocked by MongoDB Atlas
-  mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 })
-    .then(() => console.log("✅ MongoDB Forest Data Connected..."))
-    .catch((err) => console.error("❌ Connection failed. Check your MongoDB IP Whitelist:", err.message));
-}
+app.get("/", (req, res) => {
+  res.json({ status: "Backend is working", dbState: mongoose.connection.readyState });
+});
 
 // Only start the server locally (Vercel will use the exported app)
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {

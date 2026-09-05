@@ -216,12 +216,37 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
 
     if (isSignInLoaded && signIn) {
       try {
-        await signIn.create({
-          strategy: 'reset_password_email_code',
+        const signInAttempt = await signIn.create({
           identifier: formData.email,
         });
-        setForgotStep('verify_code');
-        setInfoMessage(`Reset code sent to ${formData.email}`);
+
+        const resetFactor = signInAttempt.supportedFirstFactors?.find(
+          (factor: any) => factor.strategy === 'reset_password_email_code'
+        );
+
+        if (resetFactor && 'emailAddressId' in resetFactor) {
+          await signIn.prepareFirstFactor({
+            strategy: 'reset_password_email_code',
+            emailAddressId: (resetFactor as any).emailAddressId,
+          });
+          setForgotStep('verify_code');
+          setInfoMessage(`Reset code sent to ${formData.email}`);
+        } else {
+          // If account has no password yet (e.g. newly migrated), use email_code
+          const emailCodeFactor = signInAttempt.supportedFirstFactors?.find(
+            (factor: any) => factor.strategy === 'email_code'
+          );
+          if (emailCodeFactor && 'emailAddressId' in emailCodeFactor) {
+            await signIn.prepareFirstFactor({
+              strategy: 'email_code',
+              emailAddressId: (emailCodeFactor as any).emailAddressId,
+            });
+            setForgotStep('verify_code');
+            setInfoMessage(`Verification code sent to ${formData.email}`);
+          } else {
+            setError('Password reset is not available for this account. Please try signing in with Google.');
+          }
+        }
       } catch (err: any) {
         setError(err?.errors?.[0]?.message || 'Unable to request password reset');
       } finally {
@@ -263,11 +288,19 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
 
     if (isSignInLoaded && signIn) {
       try {
-        const result = await signIn.attemptFirstFactor({
-          strategy: 'reset_password_email_code',
-          code: formData.code,
-          password: formData.password,
-        });
+        let result;
+        try {
+          result = await signIn.attemptFirstFactor({
+            strategy: 'reset_password_email_code',
+            code: formData.code,
+            password: formData.password,
+          });
+        } catch (firstErr: any) {
+          result = await signIn.attemptFirstFactor({
+            strategy: 'email_code',
+            code: formData.code,
+          });
+        }
 
         if (result.status === 'complete') {
           await setSignInActive({ session: result.createdSessionId });
