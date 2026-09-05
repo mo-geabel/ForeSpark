@@ -9,7 +9,7 @@ if (rawKey.startsWith('k_test_') || rawKey.startsWith('k_live_')) {
   rawKey = 'p' + rawKey;
 }
 
-const PUBLISHABLE_KEY = rawKey || 'pk_test_bWVhc3VyZWQtcmVkYmlyZC05NzI1LmNsZXJrLmFjY291bnRzLmRldiQ';
+const PUBLISHABLE_KEY = rawKey || 'pk_live_Y2xlcmsuZm9yZXNwYXJrLm5ldCQ';
 
 if (!PUBLISHABLE_KEY) {
   console.warn("Missing VITE_CLERK_PUBLISHABLE_KEY in environment variables");

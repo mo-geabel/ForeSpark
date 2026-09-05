@@ -4,7 +4,7 @@ dotenv.config();
 const User = require('../Models/User');
 const { createClerkClient, verifyToken } = require('@clerk/backend');
 
-const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY || 'sk_test_xERiwvcwbJhCW9MWSgZpes4h4RBy07TA1BPsnk8QrA';
+const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
 const JWT_SECRET = process.env.JWT_SECRET || '.kgfdjlkdhiythksdhflkug';
 
 const clerkClient = createClerkClient({ secretKey: CLERK_SECRET_KEY });
