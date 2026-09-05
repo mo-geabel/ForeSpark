@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignIn, useSignUp } from '@clerk/clerk-react';
+import { API_URL } from '../config/api';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,7 +27,6 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
   const [isLoading, setIsLoading] = useState(false);
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
 
   // Auto-redirect if user is already authenticated
   useEffect(() => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import { User, Phone, Mail, Check, AlertCircle, Save, MessageSquare, X } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import { API_URL } from '../config/api';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -27,8 +28,6 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const [sendingContact, setSendingContact] = useState(false);
   const [contactSuccess, setContactSuccess] = useState('');
   const [contactError, setContactError] = useState('');
-
-  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
 
   useEffect(() => {
     if (user) {

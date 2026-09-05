@@ -22,6 +22,7 @@ import {
   Settings,
   Phone,
 } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 interface ManagedUser {
   _id: string;
@@ -123,7 +124,6 @@ export default function AdminPanel() {
   };
 
   const token = localStorage.getItem('fireforest_token');
-  const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
 
   const fetchUsers = async () => {
     setLoading(true);

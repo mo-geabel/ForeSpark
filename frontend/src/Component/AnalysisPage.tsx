@@ -1,6 +1,7 @@
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { HandThumbUpIcon, HandThumbDownIcon } from "@heroicons/react/24/outline";
+import { API_URL } from "../config/api";
 
 /* =========================
    Feedback Section
@@ -56,8 +57,6 @@ function FeedbackSection({
     </div>
   );
 }
-
-const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || (import.meta.env.DEV ? '' : 'https://forestspark.onrender.com');
 
 /* =========================
    Analysis Page

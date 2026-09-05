@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { MoveLeftIcon, FileDownIcon } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 interface ScanRecord {
   _id: string;
@@ -59,7 +60,6 @@ export default function History() {
   useEffect(() => {
     const fetchHistory = async () => {
       const token = localStorage.getItem('fireforest_token');
-      const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
       const endpoint = user?.role === 'admin' ? `${API_URL}/api/admin/master-history` : `${API_URL}/api/scans/my-history`;
       
       try {

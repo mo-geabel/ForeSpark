@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth as useClerkAuth, useUser as useClerkUser } from '@clerk/clerk-react';
+import { API_URL } from '../config/api';
 
 interface User {
   id: string;
@@ -54,7 +55,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
           if (token) {
             try {
-              const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
               const response = await fetch(`${API_URL}/api/auth/user`, {
                 headers: {
                   'x-auth-token': token,
@@ -92,7 +92,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem('fireforest_token');
         if (token) {
           try {
-            const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
             const response = await fetch(`${API_URL}/api/auth/user`, {
               headers: { 
                 'x-auth-token': token,

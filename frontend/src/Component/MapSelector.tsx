@@ -3,6 +3,7 @@ import { APIProvider, Map, Marker, InfoWindow, useMap } from '@vis.gl/react-goog
 import { useNavigate } from 'react-router-dom';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import Search from './Search';
+import { API_URL } from '../config/api';
 
 function MapContent({ onLocationSelect, markerPos, placeName, isAnalyzing, handleAnalyze }: any) {
   // This must be OUTSIDE MapSelector to keep focus stable
@@ -172,7 +173,6 @@ export default function MapSelector() {
     if (!markerPos) return;
     setIsAnalyzing(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || '';
       const response = await fetch(`${API_URL}/api/scans/analyze`, {
         method: 'POST',
         headers: {
