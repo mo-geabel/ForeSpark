@@ -166,7 +166,13 @@ export default function AuthModal({ isOpen, onClose, initialMode }: AuthModalPro
           return;
         }
       } catch (clerkErr: any) {
-        console.log("Clerk sign-in notice:", clerkErr?.errors?.[0]?.message);
+        const errorMsg = clerkErr?.errors?.[0]?.message;
+        console.log("Clerk sign-in notice:", errorMsg);
+        if (errorMsg) {
+          setError(errorMsg);
+          setIsLoading(false);
+          return;
+        }
       }
     }
 
