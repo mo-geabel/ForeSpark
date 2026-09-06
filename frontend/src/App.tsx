@@ -8,6 +8,7 @@ import Documentation from './Component/Documentation';
 import AnalysisPage from './Component/AnalysisPage';
 import Presentation from './Component/Presentation';
 import AdminPanel from './Component/AdminPanel';
+import PrivacyPolicy from './Component/PrivacyPolicy';
 import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 
 // Protected Route Component
@@ -102,6 +103,13 @@ function App() {
               </AdminRoute>
             } 
           />
+          {/* Privacy Policy and Terms */}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<PrivacyPolicy />} />
+
+          {/* Fallback to Home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
