@@ -163,7 +163,7 @@ export default function PrivacyPolicy() {
             <div className="p-5 rounded-2xl bg-red-50/50 border border-red-100">
               <h3 className="font-bold text-slate-900 text-sm sm:text-base mb-2">How to Request Deletion:</h3>
               <ol className="space-y-2 text-xs sm:text-sm text-slate-700 list-decimal list-inside">
-                <li>Send an email to <a href="mailto:support@forespark.net" className="font-bold text-red-600 hover:underline">support@forespark.net</a> or <a href="mailto:mohamedgabel1@gmail.com" className="font-bold text-red-600 hover:underline">mohamedgabel1@gmail.com</a> from the email address registered with your account.</li>
+                <li>Send an email to <a href="mailto:support@forespark.net" className="font-bold text-red-600 hover:underline">support@forespark.net</a> or <a href="mailto:sssee258259@gmail.com" className="font-bold text-red-600 hover:underline">sssee258259@gmail.com</a> from the email address registered with your account.</li>
                 <li>State in the subject line: <strong>&ldquo;Account Deletion Request - ForeSpark AI&rdquo;</strong>.</li>
                 <li>Our security team will verify your identity and permanently purge your account records, telemetry data, and credentials within 7 business days.</li>
               </ol>
@@ -205,7 +205,7 @@ export default function PrivacyPolicy() {
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 inline-block text-sm">
               <p className="font-semibold text-slate-900">ForeSpark AI Privacy &amp; Compliance</p>
               <p className="text-slate-600 mt-1">
-                Email: <a href="mailto:support@forespark.net" className="text-emerald-600 font-medium hover:underline">support@forespark.net</a> / <a href="mailto:mohamedgabel1@gmail.com" className="text-emerald-600 font-medium hover:underline">mohamedgabel1@gmail.com</a>
+                Email: <a href="mailto:support@forespark.net" className="text-emerald-600 font-medium hover:underline">support@forespark.net</a> / <a href="mailto:sssee258259@gmail.com" className="text-emerald-600 font-medium hover:underline">sssee258259@gmail.com</a>
               </p>
               <p className="text-slate-600 mt-1">Website: <a href="https://www.forespark.net" className="text-emerald-600 font-medium hover:underline">https://www.forespark.net</a></p>
             </div>
