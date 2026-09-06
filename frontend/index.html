@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#EA580C" />
     <title>ForeSpark AI | Wildfire Risk &amp; Satellite Intelligence Platform</title>
     <meta name="description" content="ForeSpark AI provides real-time wildfire risk assessment, fire spread prediction, and satellite terrain analysis powered by advanced artificial intelligence." />
     <meta name="keywords" content="ForeSpark, ForeSpark AI, wildfire prediction, forest fire detection, satellite terrain analysis, wildfire risk assessment, fire spread modeling, climate AI" />
@@ -31,18 +35,43 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "ForeSpark AI",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "Web, Android, iOS",
-      "description": "AI-powered wildfire risk assessment, fire spread prediction, and satellite terrain analysis platform.",
-      "url": "https://www.forespark.net",
-      "publisher": {
-        "@type": "Organization",
-        "name": "ForeSpark AI",
-        "url": "https://www.forespark.net",
-        "logo": "https://www.forespark.net/logo.png"
-      }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.forespark.net/#website",
+          "url": "https://www.forespark.net/",
+          "name": "ForeSpark AI",
+          "description": "Real-time wildfire risk assessment, fire spread prediction, and satellite terrain analysis.",
+          "publisher": {
+            "@id": "https://www.forespark.net/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.forespark.net/#organization",
+          "name": "ForeSpark AI",
+          "url": "https://www.forespark.net/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.forespark.net/logo.png",
+            "width": 644,
+            "height": 644
+          },
+          "image": "https://www.forespark.net/logo.png"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "ForeSpark AI",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Web, Android, iOS",
+          "description": "AI-powered wildfire risk assessment, fire spread prediction, and satellite terrain analysis platform.",
+          "url": "https://www.forespark.net/",
+          "image": "https://www.forespark.net/logo.png",
+          "publisher": {
+            "@id": "https://www.forespark.net/#organization"
+          }
+        }
+      ]
     }
     </script>
   </head>
