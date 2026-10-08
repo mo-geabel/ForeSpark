@@ -1,5 +1,6 @@
 import os
 import gc
+import math
 import base64
 from io import BytesIO
 from concurrent.futures import ThreadPoolExecutor
@@ -31,11 +32,17 @@ MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
 OFFSET_X = 0.0085   # longitude offset — horizontal tile spacing
 OFFSET_Y = 0.0060   # latitude offset  — vertical tile spacing
 
-WEIGHT_MATRIX = [
-    [0.05, 0.10, 0.05],
-    [0.10, 0.40, 0.10],
-    [0.05, 0.10, 0.05]
-]
+# Spatial weighting: w_i ∝ exp(-λ·d_i), d_i = grid distance from center
+# (0 center, 1 cardinal, √2 diagonal), normalized to sum to 1.
+# λ = 0.5 (calibrated in the paper) → center ≈ 0.185, cardinal ≈ 0.112, diagonal ≈ 0.091
+WEIGHT_DECAY = 0.5
+
+def _build_weight_matrix(decay):
+    raw = [[math.exp(-decay * math.hypot(r - 1, c - 1)) for c in range(3)] for r in range(3)]
+    total = sum(sum(row) for row in raw)
+    return [[w / total for w in row] for row in raw]
+
+WEIGHT_MATRIX = _build_weight_matrix(WEIGHT_DECAY)
 
 # --- MODEL SETUP ---
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

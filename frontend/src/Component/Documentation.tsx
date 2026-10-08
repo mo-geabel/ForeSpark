@@ -253,82 +253,82 @@ export default function Documentation() {
                   <div className="grid grid-cols-3 gap-3 w-fit">
                     {/* Top-left corner */}
                     <div className="w-24 h-24 bg-blue-100 border-2 border-blue-400 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-blue-900">5%</div>
+                      <div className="text-xs font-black text-blue-900">9.1%</div>
                       <div className="text-[10px] text-blue-700 font-bold mt-1">Corner</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.05 weight
+                        0.091 weight
                       </div>
                     </div>
 
                     {/* Top center */}
                     <div className="w-24 h-24 bg-emerald-200 border-2 border-emerald-500 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-emerald-900">10%</div>
+                      <div className="text-xs font-black text-emerald-900">11.2%</div>
                       <div className="text-[10px] text-emerald-700 font-bold mt-1">Edge</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.10 weight
+                        0.112 weight
                       </div>
                     </div>
 
                     {/* Top-right corner */}
                     <div className="w-24 h-24 bg-blue-100 border-2 border-blue-400 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-blue-900">5%</div>
+                      <div className="text-xs font-black text-blue-900">9.1%</div>
                       <div className="text-[10px] text-blue-700 font-bold mt-1">Corner</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.05 weight
+                        0.091 weight
                       </div>
                     </div>
 
                     {/* Middle-left */}
                     <div className="w-24 h-24 bg-emerald-200 border-2 border-emerald-500 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-emerald-900">10%</div>
+                      <div className="text-xs font-black text-emerald-900">11.2%</div>
                       <div className="text-[10px] text-emerald-700 font-bold mt-1">Edge</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.10 weight
+                        0.112 weight
                       </div>
                     </div>
 
                     {/* Center - Main patch */}
                     <div className="w-24 h-24 bg-gradient-to-br from-orange-300 to-orange-500 border-4 border-orange-600 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-2xl hover:shadow-orange-400 transition-all cursor-pointer group shadow-lg">
-                      <div className="text-sm font-black text-white">40%</div>
+                      <div className="text-sm font-black text-white">18.5%</div>
                       <div className="text-xs text-orange-100 font-bold mt-1">Center</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-orange-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold">
-                        0.40 weight
+                        0.185 weight
                       </div>
                     </div>
 
                     {/* Middle-right */}
                     <div className="w-24 h-24 bg-emerald-200 border-2 border-emerald-500 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-emerald-900">10%</div>
+                      <div className="text-xs font-black text-emerald-900">11.2%</div>
                       <div className="text-[10px] text-emerald-700 font-bold mt-1">Edge</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.10 weight
+                        0.112 weight
                       </div>
                     </div>
 
                     {/* Bottom-left corner */}
                     <div className="w-24 h-24 bg-blue-100 border-2 border-blue-400 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-blue-900">5%</div>
+                      <div className="text-xs font-black text-blue-900">9.1%</div>
                       <div className="text-[10px] text-blue-700 font-bold mt-1">Corner</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.05 weight
+                        0.091 weight
                       </div>
                     </div>
 
                     {/* Bottom center */}
                     <div className="w-24 h-24 bg-emerald-200 border-2 border-emerald-500 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-emerald-900">10%</div>
+                      <div className="text-xs font-black text-emerald-900">11.2%</div>
                       <div className="text-[10px] text-emerald-700 font-bold mt-1">Edge</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.10 weight
+                        0.112 weight
                       </div>
                     </div>
 
                     {/* Bottom-right corner */}
                     <div className="w-24 h-24 bg-blue-100 border-2 border-blue-400 rounded-lg flex flex-col items-center justify-center p-2 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="text-xs font-black text-blue-900">5%</div>
+                      <div className="text-xs font-black text-blue-900">9.1%</div>
                       <div className="text-[10px] text-blue-700 font-bold mt-1">Corner</div>
                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        0.05 weight
+                        0.091 weight
                       </div>
                     </div>
                   </div>
@@ -338,15 +338,15 @@ export default function Documentation() {
                 <div className="flex gap-6 mt-2 pt-6 w-full justify-center flex-wrap">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 bg-gradient-to-br from-orange-300 to-orange-500 rounded border-2 border-orange-600"></div>
-                    <span className="text-sm font-semibold text-slate-700">Center (40%)</span>
+                    <span className="text-sm font-semibold text-slate-700">Center (18.5%)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 bg-emerald-200 rounded border-2 border-emerald-500"></div>
-                    <span className="text-sm font-semibold text-slate-700">Edge (10% each)</span>
+                    <span className="text-sm font-semibold text-slate-700">Edge (11.2% each)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 bg-blue-100 rounded border-2 border-blue-400"></div>
-                    <span className="text-sm font-semibold text-slate-700">Corner (5% each)</span>
+                    <span className="text-sm font-semibold text-slate-700">Corner (9.1% each)</span>
                   </div>
                 </div>
               </div>
@@ -374,7 +374,7 @@ export default function Documentation() {
                     <div>
                       <h4 className="font-bold text-slate-900">Weighted Aggregation</h4>
                       <p className="text-slate-600 text-sm mt-1">
-                        The center patch (target area) gets 40% weight as it's most critical. Edge patches (4 neighbors) get 10% each, corner patches get 5% each.
+                        Weights decay exponentially with distance from the center (w ∝ e<sup>−λd</sup>, λ = 0.5) and sum to 100%: the center patch (target area) gets 18.5%, each of the 4 edge neighbors 11.2%, and each corner 9.1%.
                       </p>
                     </div>
                   </div>

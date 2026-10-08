@@ -1253,21 +1253,21 @@ export default function Presentation() {
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
                           <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                          <div className="text-sm font-black text-slate-800">w=0.091</div>
                         </div>
                       </div>
                       <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
                           <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                          <div className="text-sm font-black text-slate-800">w=0.112</div>
                         </div>
                       </div>
                       <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
                           <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                          <div className="text-sm font-black text-slate-800">w=0.091</div>
                         </div>
                       </div>
 
@@ -1276,21 +1276,21 @@ export default function Presentation() {
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
                           <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                          <div className="text-sm font-black text-slate-800">w=0.112</div>
                         </div>
                       </div>
                       <div className={`w-24 h-24 sm:w-28 sm:h-28 -m-2 rounded-xl border-4 flex flex-col items-center justify-center z-10 transition-colors duration-500 relative overflow-hidden shadow-lg ${showEdgeCase ? 'border-orange-500' : 'border-orange-400 bg-orange-50'}`}>
                         {showEdgeCase && <div className="absolute inset-0 bg-[#16a34a] opacity-90 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-lg border border-orange-200">
                           <div className="text-[9px] font-black text-orange-600 uppercase">{isTr ? 'HEDEF PARÇA' : 'TARGET PATCH'}</div>
-                          <div className="text-base font-black text-slate-900">w=0.40</div>
+                          <div className="text-base font-black text-slate-900">w=0.185</div>
                         </div>
                       </div>
                       <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
                           <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                          <div className="text-sm font-black text-slate-800">w=0.112</div>
                         </div>
                       </div>
 
@@ -1299,21 +1299,21 @@ export default function Presentation() {
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
                           <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                          <div className="text-sm font-black text-slate-800">w=0.091</div>
                         </div>
                       </div>
                       <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-400' : 'border-emerald-300 bg-emerald-50/30'}`}>
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-emerald-100">
                           <div className="text-[10px] font-bold text-emerald-600">{isTr ? 'Ana Yön' : 'Cardinal'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.10</div>
+                          <div className="text-sm font-black text-slate-800">w=0.112</div>
                         </div>
                       </div>
                       <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 flex flex-col items-center justify-center transition-colors duration-500 relative overflow-hidden ${showEdgeCase ? 'border-sky-300' : 'border-slate-300 bg-white'}`}>
                         {showEdgeCase && <div className="absolute inset-0 bg-[#0ea5e9] opacity-80 z-0"></div>}
                         <div className="relative z-10 text-center bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg">
                           <div className="text-[10px] font-bold text-slate-500">{isTr ? 'Köşe' : 'Corner'}</div>
-                          <div className="text-sm font-black text-slate-800">w=0.05</div>
+                          <div className="text-sm font-black text-slate-800">w=0.091</div>
                         </div>
                       </div>
 
@@ -1340,13 +1340,13 @@ export default function Presentation() {
                           <div>
                             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">{isTr ? 'Uzamsal Ağırlıklandırmadan Sonra' : 'After Spatial Weighting'}</div>
                             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-100 text-amber-700 text-xs font-black">
-                              0.45 {isTr ? 'ORMAN YANGINI' : 'WILDFIRE'} <span className="opacity-70 font-bold">{isTr ? '(Güvenli Eşik)' : '(Safe Threshold)'}</span>
+                              0.26 {isTr ? 'ORMAN YANGINI' : 'WILDFIRE'} <span className="opacity-70 font-bold">{isTr ? '(Güvenli Eşik)' : '(Safe Threshold)'}</span>
                             </div>
                           </div>
                         </div>
 
                         <p className="text-[11px] text-sky-700 font-medium leading-relaxed bg-white/60 p-3 rounded-xl border border-sky-200/50">
-                          {isTr ? '"Çevredeki su parçaları 0.10×4 + 0.05×4 = 0.60 Risksiz sinyal ağırlığına katkıda bulunarak yanlış pozitifi etkili bir şekilde bastırır."' : '"Surrounding water patches contribute 0.10×4 + 0.05×4 = 0.60 weight of No-Risk signal, effectively muting the false positive."'}
+                          {isTr ? '"Çevredeki su parçaları 0.112×4 + 0.091×4 ≈ 0.81 Risksiz sinyal ağırlığına katkıda bulunarak yanlış pozitifi etkili bir şekilde bastırır."' : '"Surrounding water patches contribute 0.112×4 + 0.091×4 ≈ 0.81 weight of No-Risk signal, effectively muting the false positive."'}
                         </p>
                       </div>
                     ) : (
