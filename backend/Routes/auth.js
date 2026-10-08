@@ -48,7 +48,10 @@ router.post('/register', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '365d' },
       (err, token) => {
-        if (err) throw err;
+        if (err) {
+          console.error("JWT sign error:", err.message);
+          return res.status(500).json({ message: "Server error" });
+        }
         // Don't send the password back to the frontend for security
         const userResponse = {
           id: user._id,
@@ -111,7 +114,10 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '365d' },
       (err, token) => {
-        if (err) throw err;
+        if (err) {
+          console.error("JWT sign error:", err.message);
+          return res.status(500).json({ message: "Server error" });
+        }
         // Return token and basic user info (excluding password)
         res.json({ 
           token, 
@@ -198,6 +204,9 @@ router.put('/profile', auth, async (req, res) => {
 });
 
 
+// Public OAuth web client ID used by the mobile app (not a secret)
+const GOOGLE_WEB_CLIENT_ID = '148034546786-9ms1scbg693180d8jkc91v47j6pe7tf2.apps.googleusercontent.com';
+
 router.post('/google', async (req, res) => {
     // 1. Add a log to see if the request even reaches here
     console.log("Google Login request received");
@@ -212,10 +221,14 @@ router.post('/google', async (req, res) => {
         // 2. Verify with Google
         const ticket = await client.verifyIdToken({
             idToken: idToken,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            // Always pin the audience: without it, tokens issued to any Google app are accepted
+            audience: process.env.GOOGLE_CLIENT_ID || GOOGLE_WEB_CLIENT_ID,
         });
         
         const payload = ticket.getPayload();
+        if (!payload || !payload.email || payload.email_verified !== true) {
+            return res.status(401).json({ message: "Google account email is not verified" });
+        }
         console.log("Google payload verified for:", payload.email);
 
         const { email, name, sub } = payload;

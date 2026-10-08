@@ -271,7 +271,7 @@ def predict():
 
         if total_score > 0.85:
             res = "Critical Risk"
-        elif total_score > 0.45:
+        elif total_score >= 0.5:  # decision threshold used in the paper
             res = "High Risk"
         else:
             res = "Low Risk"

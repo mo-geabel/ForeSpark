@@ -32,7 +32,7 @@ export default function History() {
   const [_, setLoading] = useState(true);
 
   const downloadCSV = () => {
-    const headers = ["User", "Region", "Latitude", "Longitude", "Risk_Level", "Accuracy", "Date", "User_Feedback", "Notes"];
+    const headers = ["User", "Region", "Latitude", "Longitude", "Risk_Level", "Risk_Score", "Date", "User_Feedback", "Notes"];
     
     const rows = scans.map(scan => [
       scan.userId?.fullName || "N/A",
@@ -117,7 +117,7 @@ export default function History() {
                   {user?.role === 'admin' && <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400">User</th>}
                   <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400">Region</th>
                   <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400">Risk Level</th>
-                  <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400">AI Accuracy</th>
+                  <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400">Risk Score</th>
                   {user?.role === 'admin' && <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400 text-center">Status</th>}
                   <th className="px-10 py-6 text-[10px] font-black uppercase text-slate-400 text-right">Date</th>
                 </tr>
@@ -140,7 +140,7 @@ export default function History() {
                       </td>
                       <td style={{padding: '7px'}} className="px-12 py-7">
                         <span className={`px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest border ${
-                          scan.prediction.riskLevel.toLowerCase().includes('high') 
+                          /high|critical/i.test(scan.prediction.riskLevel)
                           ? 'bg-red-50 text-red-600 border-red-100' 
                           : 'bg-emerald-50 text-emerald-600 border-emerald-100'
                         }`}>
