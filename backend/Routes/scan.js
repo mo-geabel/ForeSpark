@@ -109,12 +109,12 @@ router.post('/analyze', auth, async (req, res) => {
   }
 });
 
-router.patch('/feedback/:scanId', async (req, res) => {
+router.patch('/feedback/:scanId', auth, async (req, res) => {
   const { isCorrect, notes } = req.body;
-  console.log(isCorrect);
   try {
-    const updatedScan = await Scan.findByIdAndUpdate(
-      req.params.scanId,
+    // Users may only update feedback on their own scans
+    const updatedScan = await Scan.findOneAndUpdate(
+      { _id: req.params.scanId, userId: req.user.id },
       {
         $set: {
           'userFeedback.isCorrect': isCorrect,
@@ -124,7 +124,9 @@ router.patch('/feedback/:scanId', async (req, res) => {
       },
       { new: true }
     );
-    console.log(updatedScan);
+    if (!updatedScan) {
+      return res.status(404).json({ message: "Scan not found" });
+    }
     res.json(updatedScan);
   } catch (err) {
     res.status(500).json({ message: "Failed to save feedback" });

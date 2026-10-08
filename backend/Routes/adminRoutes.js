@@ -39,7 +39,7 @@ router.get('/master-history', adminProtect, async (req, res) => {
 });
 
 // GET only scans where the AI might have been wrong (for retraining)
-router.get('/rl-training-data', async (req, res) => {
+router.get('/rl-training-data', adminProtect, async (req, res) => {
   try {
     const mistakes = await Scan.find({ 'userFeedback.isCorrect': false })
       .populate('userId', 'fullName');

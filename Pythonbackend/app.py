@@ -208,17 +208,25 @@ def predict():
         # 2. Vectorized Batch Inference + Grad-CAM across all valid tiles in ONE step
         valid_indices = [i for i, t in enumerate(ordered_tiles) if t["base_img"] is not None]
 
+        # No imagery at all (e.g. bad/expired MAPBOX_TOKEN) must be an error,
+        # not a 0% "Low Risk" verdict.
+        if not valid_indices:
+            print("All tiles failed:", sorted({t["error"] for t in ordered_tiles if t["error"]}))
+            return jsonify({"error": "Could not load satellite imagery for this location. Please try again later."}), 500
+
+        # Renormalize weights over the tiles that loaded so they still sum to 1
+        valid_weight_sum = sum(ordered_tiles[i]["weight"] for i in valid_indices)
+
         probabilities = [0.0] * 9
         cam_heatmaps = [None] * 9
 
-        if valid_indices:
-            batch_tensors = torch.stack([transform(ordered_tiles[i]["base_img"]) for i in valid_indices]).to(device)
-            valid_probs, valid_cams = compute_batch_gradcam(model, batch_tensors)
-            del batch_tensors
+        batch_tensors = torch.stack([transform(ordered_tiles[i]["base_img"]) for i in valid_indices]).to(device)
+        valid_probs, valid_cams = compute_batch_gradcam(model, batch_tensors)
+        del batch_tensors
 
-            for idx, prob, cam in zip(valid_indices, valid_probs, valid_cams):
-                probabilities[idx] = float(prob)
-                cam_heatmaps[idx] = cam
+        for idx, prob, cam in zip(valid_indices, valid_probs, valid_cams):
+            probabilities[idx] = float(prob)
+            cam_heatmaps[idx] = cam
 
         # 3. Assemble Grid Results
         grid_results = []
@@ -226,7 +234,7 @@ def predict():
             lbl = tile["label"]
             lat = tile["lat"]
             lng = tile["lng"]
-            weight = tile["weight"]
+            weight = tile["weight"] / valid_weight_sum
             url = tile["url"]
             base_img = tile["base_img"]
             err = tile["error"]

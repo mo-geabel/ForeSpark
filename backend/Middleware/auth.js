@@ -22,42 +22,27 @@ module.exports = async function(req, res, next) {
   // 1. Check if token is a Clerk Session Token
   try {
     let clerkUserId = null;
-    try {
-      const verifiedClerk = await verifyToken(token, { secretKey: CLERK_SECRET_KEY });
-      if (verifiedClerk && verifiedClerk.sub) {
-        clerkUserId = verifiedClerk.sub;
-      }
-    } catch (clerkVerifyErr) {
-      // Fallback for Clerk mobile token expiration / clock drift: inspect decoded token
-      const unverified = jwt.decode(token);
-      if (unverified && unverified.sub && unverified.iss && unverified.iss.includes('clerk')) {
-        clerkUserId = unverified.sub;
-        console.log(`[Auth Middleware] Verified Clerk session via decoded sub: ${clerkUserId}`);
-      } else {
-        throw clerkVerifyErr;
-      }
+    // Only signature-verified Clerk tokens are accepted. Clock drift between
+    // the phone and server is tolerated via clockSkewInMs; never trust a
+    // decoded-but-unverified token, since anyone can forge one.
+    const verifiedClerk = await verifyToken(token, { secretKey: CLERK_SECRET_KEY, clockSkewInMs: 60000 });
+    if (verifiedClerk && verifiedClerk.sub) {
+      clerkUserId = verifiedClerk.sub;
     }
 
     if (clerkUserId) {
-      const headerEmail = req.header('x-user-email');
-      
       // Find or auto-sync user in MongoDB
       let user = await User.findOne({ clerkId: clerkUserId });
-      
-      if (!user && headerEmail) {
-        user = await User.findOne({ email: headerEmail.toLowerCase().trim() });
-        if (user) {
-          user.clerkId = clerkUserId;
-          await user.save();
-          console.log(`[Auth Middleware] Linked existing user ${user.email} (${user.role}) to Clerk ID ${clerkUserId}`);
-        }
-      }
 
       if (!user) {
-        // Fetch profile details from Clerk API
+        // Fetch profile details from Clerk API. Existing accounts are linked
+        // only by an email address Clerk has verified (never by a client header).
         try {
           const clerkUser = await clerkClient.users.getUser(clerkUserId);
-          const email = (clerkUser.emailAddresses?.[0]?.emailAddress || `${clerkUserId}@clerk.user`).toLowerCase().trim();
+          const primary = clerkUser.emailAddresses?.find(e => e.id === clerkUser.primaryEmailAddressId)
+            || clerkUser.emailAddresses?.[0];
+          const isVerified = primary?.verification?.status === 'verified';
+          const email = (isVerified ? primary.emailAddress : `${clerkUserId}@clerk.user`).toLowerCase().trim();
           const fullName = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || clerkUser.username || 'User';
 
           user = await User.findOne({ email });
